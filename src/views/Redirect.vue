@@ -1,0 +1,13 @@
+//用于路由刷新，将会重定向到指定路由
+<script>
+export default {
+  beforeCreate() {
+    const { params, query } = this.$route;
+    const { path } = params;
+    this.$router.replace({ path: "/" + path, query });
+  },
+  render: function(h) {
+    return h(); // 避免警告信息
+  },
+};
+</script>

@@ -1,31 +1,104 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Layout from "@/layout";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
-  const routes = [
+/*
+对VueRouter原型链上的push、replace方法进行重写
+为了解决某些情况下控制台报 ‘Uncaught (in promise) undefined’的问题
+参考地址：https://github.com/vuejs/vue-router/issues/2881
+*/
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject)
+    return originalPush.call(this, location, onResolve, onReject);
+  return originalPush.call(this, location).catch((err) => err);
+};
+/**
+ * affix 在tabs中不能被删除，不能被移动，最少且必须有一个
+ *
+ */
+const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    component: Layout,
+    children: [
+      {
+        path: "/index",
+        name: "Home",
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/Home.vue"),
+        meta: { title: "首页", icon: "el-icon-s-marketing", affix: true },
+      },
+    ],
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/About.vue')
-    }
-  }
-]
+    path: "/",
+    component: Layout,
+    children: [
+      {
+        path: "/about",
+        name: "About",
+        component: () =>
+          import(/* webpackChunkName: "about" */ "@/views/About.vue"),
+        meta: { title: "数据看板", icon: "el-icon-s-marketing" },
+      },
+    ],
+  },
+  {
+    path: "/",
+    component: Layout,
+    meta: { title: "嵌套路由", icon: "el-icon-s-marketing" },
+    children: [
+      {
+        path: "/menu1",
+        name: "Menu1",
+        component: () =>
+          import(/* webpackChunkName: "menu1" */ "@/views/Menu1.vue"),
+        meta: { title: "菜单1", icon: "el-icon-s-marketing" },
+      },
+      {
+        path: "/nested",
+        redirect: "/menu2",
+        meta: { title: "二级嵌套", icon: "el-icon-s-marketing" },
+        children: [
+          {
+            path: "/menu2",
+            name: "Menu2",
+            component: () =>
+              import(/* webpackChunkName: "menu2" */ "@/views/Menu2.vue"),
+            meta: { title: "菜单2", icon: "el-icon-s-marketing" },
+          },
+          {
+            path: "/menu3",
+            name: "Menu3",
+            component: () =>
+              import(/* webpackChunkName: "menu2" */ "@/views/Menu3.vue"),
+            meta: { title: "菜单3", icon: "el-icon-s-marketing" },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "/redirect",
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: "/redirect/:path*",
+        component: () =>
+          import(/* webpackChunkName: "redirect" */ "@/views/Redirect.vue"),
+      },
+    ],
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

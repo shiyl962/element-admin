@@ -1,22 +1,20 @@
 <template>
-  <div>
-    <el-input v-model="value"></el-input>
-  </div>
+  <div><el-input v-model="value"></el-input></div>
 </template>
 
 <script>
 export default {
-  name: "About",
-  methods: {},
-  watch: {},
-  computed: {},
-  created() {},
-  mounted() {},
+  name: "Menu1",
   components: {},
   props: {},
   data() {
     return { value: "" };
   },
+  computed: {},
+  created() {},
+  mounted() {},
+  methods: {},
+  watch: {},
 };
 </script>
 
