@@ -56,28 +56,21 @@ const routes = [
         name: "Menu1",
         component: () =>
           import(/* webpackChunkName: "menu1" */ "@/views/Menu1.vue"),
-        meta: { title: "菜单1", icon: "el-icon-s-marketing" },
+        meta: { title: "回到顶部", icon: "el-icon-s-marketing" },
       },
       {
-        path: "/nested",
-        redirect: "/menu2",
-        meta: { title: "二级嵌套", icon: "el-icon-s-marketing" },
-        children: [
-          {
-            path: "/menu2",
-            name: "Menu2",
-            component: () =>
-              import(/* webpackChunkName: "menu2" */ "@/views/Menu2.vue"),
-            meta: { title: "菜单2", icon: "el-icon-s-marketing" },
-          },
-          {
-            path: "/menu3",
-            name: "Menu3",
-            component: () =>
-              import(/* webpackChunkName: "menu2" */ "@/views/Menu3.vue"),
-            meta: { title: "菜单3", icon: "el-icon-s-marketing" },
-          },
-        ],
+        path: "/menu2",
+        name: "Menu2",
+        component: () =>
+          import(/* webpackChunkName: "menu2" */ "@/views/Menu2.vue"),
+        meta: { title: "菜单2", icon: "el-icon-s-marketing" },
+      },
+      {
+        path: "/menu3",
+        name: "Menu3",
+        component: () =>
+          import(/* webpackChunkName: "menu2" */ "@/views/Menu3.vue"),
+        meta: { title: "菜单3", icon: "el-icon-s-marketing" },
       },
     ],
   },

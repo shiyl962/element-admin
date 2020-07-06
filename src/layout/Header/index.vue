@@ -12,6 +12,12 @@
       <Breadcrumb />
     </div>
     <div>
+      <el-tooltip effect="dark" content="换肤" placement="bottom">
+        <div>
+          <el-switch v-model="value"> </el-switch>
+        </div>
+      </el-tooltip>
+
       <Screenfull class="link" />
 
       <el-dropdown class="dropdown link" trigger="click">

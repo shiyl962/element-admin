@@ -66,7 +66,6 @@ export default {
     },
     change() {
       this.isFullscreen = screenfull.isFullscreen;
-      console.log(this.isFullscreen);
     },
     init() {
       if (screenfull.isEnabled) {
