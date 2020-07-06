@@ -6,11 +6,14 @@
         <Header />
         <Tabs />
       </el-header>
-      <el-main>
+
+      <el-main class="main">
         <keep-alive :include="include">
           <router-view />
         </keep-alive>
       </el-main>
+
+      <el-backtop target=".main"></el-backtop>
     </el-container>
   </el-container>
 </template>
@@ -34,5 +37,8 @@ export default {
 <style scoped>
 .el-header {
   padding: 0;
+}
+.main {
+  height: calc(100vh - 100px);
 }
 </style>
