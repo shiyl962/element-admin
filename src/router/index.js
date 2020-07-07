@@ -17,7 +17,8 @@ VueRouter.prototype.push = function push(location, onResolve, onReject) {
 };
 /**
  * affix 在tabs中不能被删除，不能被移动，最少且必须有一个
- *
+ * hidden 不会出现在侧边栏
+ * name 必须与组件name一致，用于路由缓存功能
  */
 const routes = [
   {
