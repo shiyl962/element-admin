@@ -41,9 +41,33 @@ routerList.forEach((item) => {
   }
 });
 
+let history = null; // 在tabs改变的时候记录之前的状态
+
 // tabs 改变之后可能需要改变路由
 let goRouter = () => {
+  let fullPath = router.currentRoute.fullPath; //获取当前的路由
   let tabs = store.state.layout.tabs;
+
+  // 如果当前路由还在当前的tabs中则不进行任何跳转
+  if (tabs.some((item) => item.to === fullPath)) {
+    return;
+  }
+
+  /**
+   * 到这里的时候说明当前路由的tabs已经被删除
+   * 跳转到当前tabs的后面一个还存在的tabs的路由
+   */
+  let index = history.findIndex((item) => item.to === fullPath);
+  let len = history.length;
+  for (let i = index + 1; i < len; i++) {
+    if (tabs.some((item) => item.to === history[i].to)) {
+      router.push(history[i].to);
+      return;
+    }
+  }
+  /**
+   * 走到这里说明当前路由后面的tabs全部被删除或者根本就没有
+   */
   router.push(tabs[tabs.length - 1].to);
 };
 
@@ -78,6 +102,7 @@ const layout = {
 
     // 添加tabs
     addTabs(state, route) {
+      history = Array.from(state.tabs);
       if (route.meta && route.meta.title && route.name) {
         if (!state.tabs.some((item) => item.to === route.fullPath)) {
           let tab = {
@@ -96,6 +121,7 @@ const layout = {
 
     // 删除一个tabs
     delTabs(state, route) {
+      history = Array.from(state.tabs);
       if (!route || route.affix) return;
       state.tabs = state.tabs.filter((item) => {
         // 增加容错率 优先使用 路径 匹配 其次使用 name 匹配
@@ -111,28 +137,23 @@ const layout = {
 
     // 删除其他 保留传入的一个
     closeOthers(state, route) {
+      history = Array.from(state.tabs);
       if (!route) return;
-      if (state.tabs.some((item) => item.affix && item.to === route.to)) {
-        state.tabs = Array.from(defaultTabs);
-        state.include = Array.from(defaultInclude);
-      } else {
-        let tabs = Array.from(defaultTabs);
-        tabs.push({
-          to: route.to,
-          name: route.name,
-          title: route.title,
-        });
-        state.tabs = tabs;
-        let include = Array.from(defaultInclude);
-        include.push(route.name);
-        state.include = include;
-      }
+      state.tabs = state.tabs.filter(
+        (item) => item.affix || item.to === route.to
+      );
+      state.include = state.tabs.map((item) => item.name);
       goRouter();
     },
 
-    // 清空tabs
+    /**
+     * 清空tabs
+     * 可以理解为恢复默认
+     * 但是修改的时候需要保持tabs的顺序
+     * */
     emptyTabs(state) {
-      state.tabs = Array.from(defaultTabs);
+      history = Array.from(state.tabs);
+      state.tabs = state.tabs.filter((item) => item.affix);
       state.include = Array.from(defaultInclude);
       goRouter();
     },
