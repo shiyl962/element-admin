@@ -12,11 +12,11 @@
       <Breadcrumb />
     </div>
     <div>
-      <el-tooltip effect="dark" content="换肤" placement="bottom">
-        <div>
-          <el-switch v-model="value"> </el-switch>
-        </div>
-      </el-tooltip>
+      <div>
+        <!-- <el-tooltip effect="dark" content="换肤" placement="bottom"> -->
+        <el-switch v-model="value"> </el-switch>
+        <!-- </el-tooltip> -->
+      </div>
 
       <Screenfull class="link" />
 
@@ -41,7 +41,7 @@ export default {
   components: { Breadcrumb, Screenfull },
   data() {
     return {
-      value: "",
+      value: false,
     };
   },
   computed: {
@@ -53,6 +53,26 @@ export default {
     // 控制侧边栏导航
     setCollapse(collapse) {
       this.$store.commit("setCollapse", collapse);
+    },
+    toggleClass(element, className) {
+      if (!element || !className) {
+        return;
+      }
+      let classString = element.className;
+      const nameIndex = classString.indexOf(className);
+      if (nameIndex === -1) {
+        classString += "" + className;
+      } else {
+        classString =
+          classString.substr(0, nameIndex) +
+          classString.substr(nameIndex + className.length);
+      }
+      element.className = classString;
+    },
+  },
+  watch: {
+    value() {
+      this.toggleClass(document.body, "custom-theme");
     },
   },
 };

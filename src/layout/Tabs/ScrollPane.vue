@@ -110,7 +110,7 @@ export default {
 .box::-webkit-scrollbar {
   display: none;
 }
-.arrows {
+.tabs-scroll .arrows {
   line-height: 34px;
   width: 15px;
   border: 1px solid #dcdfe6;

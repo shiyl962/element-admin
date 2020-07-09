@@ -36,9 +36,10 @@ export default {
 
 <style scoped>
 .el-header {
-  padding: 0;
+  padding: 0 !important;
 }
 .main {
   height: calc(100vh - 100px);
+  text-align: left;
 }
 </style>

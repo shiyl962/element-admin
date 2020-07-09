@@ -142,4 +142,7 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.aside >>> .el-menu-item.is-active {
+  color: #409eff;
+}
 </style>

@@ -65,7 +65,7 @@ const routes = [
         name: "Menu2",
         component: () =>
           import(/* webpackChunkName: "menu" */ "@/views/Menu2.vue"),
-        meta: { title: "菜单2", icon: "el-icon-s-marketing" },
+        meta: { title: "换肤预览", icon: "el-icon-s-marketing" },
       },
       {
         path: "/menu3",
