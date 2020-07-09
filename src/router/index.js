@@ -25,6 +25,7 @@ const routes = [
   {
     path: "/",
     component: Layout,
+    redirect: "/index",
     children: [
       {
         path: "/index",
@@ -91,7 +92,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  // mode: "history",
   base: process.env.BASE_URL,
   routes,
 });
