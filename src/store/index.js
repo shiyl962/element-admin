@@ -97,7 +97,7 @@ const layout = {
 
     // 恢复默认
     emptyInclude(state) {
-      state.include = Array.from(defaultInclude);
+      state.include = [...defaultInclude];
     },
 
     // 添加tabs
@@ -137,7 +137,7 @@ const layout = {
 
     // 删除其他 保留传入的一个
     closeOthers(state, route) {
-      history = Array.from(state.tabs);
+      history = [...state.tabs];
       if (!route) return;
       state.tabs = state.tabs.filter(
         (item) => item.affix || item.to === route.to
@@ -152,9 +152,9 @@ const layout = {
      * 但是修改的时候需要保持tabs的顺序
      * */
     emptyTabs(state) {
-      history = Array.from(state.tabs);
+      history = [...state.tabs];
       state.tabs = state.tabs.filter((item) => item.affix);
-      state.include = Array.from(defaultInclude);
+      state.include = [...defaultInclude];
       goRouter();
     },
 
