@@ -7,6 +7,7 @@
 
 <script>
 // @ is an alias to /src
+import { getMenuList } from "@/api/index";
 
 export default {
   name: "Home",
@@ -15,6 +16,11 @@ export default {
     return {
       value: "",
     };
+  },
+  mounted() {
+    getMenuList().then((value) => {
+      console.log(value.data);
+    });
   },
 };
 </script>
