@@ -7,7 +7,7 @@
         :key="i[itemkey]"
         :style="{
           width: colsWidth + 'px',
-          height: i.itemBoxHeight + 'px',
+          height: i.imgHeight + 'px',
           left: i.left + 'px',
           top: i.top + 'px',
         }"
@@ -20,7 +20,10 @@
 </template>
 
 <script>
-var elementResizeDetectorMaker = require("element-resize-detector");
+let elementResizeDetectorMaker = require("element-resize-detector");
+let erdUltraFast = elementResizeDetectorMaker({
+  strategy: "scroll", //<- For ultra performance.
+});
 import myLoading from "@/components/my-loading";
 
 export default {
@@ -36,6 +39,11 @@ export default {
       type: Number,
       default: 240,
     },
+    // 图片加载失败时的默认图片地址
+    errSrc: {
+      type: String,
+      default: ``,
+    },
     // 列表渲染的 key ，默认为 srcKey
     idKey: {
       type: String,
@@ -44,7 +52,7 @@ export default {
     /**
      * 默认是等所有img预加载完之后再渲染，但是这给用户的体验会很慢，所有我还加了个loading
      * 如果你的数据的顺序不重要，可以设置此参数为true，他会让用户更快看到图片，但是会打乱数据的顺序，同时去掉loading功能
-     * 更好的方式是传入的数据中就包含有 itemBoxHeight（图片高度），这样会跳过预加载环节
+     * 更好的方式是传入的数据中就包含有 imgHeight（图片高度），这样会跳过预加载环节
      *  */
     fastWay: {
       type: Boolean,
@@ -57,27 +65,25 @@ export default {
       itemkey: this.idKey || this.srcKey, // 渲染时的key值
       loading: false, // 控制loading状态
       containerHeight: 0, // 父容器的高度
-      cols: 0, // 当前最矮的列
-      top: 0, // 当前最矮的列的高度
-      erdUltraFast: elementResizeDetectorMaker({
-        strategy: "scroll", //<- For ultra performance.
-      }),
+      column: 0, // 总列数
     };
   },
   computed: {
-    // loading高度
+    // loading模块高度
     loadingHeight() {
       return this.item.length ? "100px" : "500px";
     },
   },
   mounted() {
+    this.calcColumn();
     // 容器宽度改变时重新布局
-    this.erdUltraFast.listenTo(this.$el, this.calcElement);
+    erdUltraFast.listenTo(this.$el, this.calcElement);
   },
   methods: {
     // 用来向item中添加数据
     // 现在是先加载完先渲染的逻辑
     addItemData(items) {
+      let index = 0; // 用来记录已经预加载完成的个数
       // 出口
       let exit = (i, index) => {
         if (this.fastWay) {
@@ -92,44 +98,43 @@ export default {
         }
       };
 
-      let index = 0; // 用来记录已经预加载完成的个数
-      items.forEach((i) => {
+      items.forEach((item) => {
         if (!this.fastWay) {
           this.loading = true;
         }
         // 如果高度已知，就不需要预加载
-        if (i.itemBoxHeight) {
+        if (item.imgHeight) {
           index++;
-          exit(i, index);
+          exit(item, index);
         } else {
           let oImg = new Image();
-          oImg.src = i[this.srcKey];
+          oImg.src = item[this.srcKey];
+          // 预加载完成时
           oImg.onload = () => {
             index++;
-            i.itemBoxHeight = (oImg.height / oImg.width) * this.colsWidth;
-            exit(i, index);
+            item.imgHeight = (oImg.height / oImg.width) * this.colsWidth;
+            exit(item, index);
+          };
+          // 加载期间发生错误时
+          oImg.onerror = () => {
+            index++;
+            item[this.srcKey] = this.errSrc;
+            item.imgHeight = this.colsWidth;
+            exit(item, index);
           };
         }
       });
     },
+
     // 计算单个的位置
     vnodeItem(item, index) {
-      let elWidth = this.$el.offsetWidth; // 获取容器的宽度
-      let cols = Math.floor(elWidth / this.colsWidth); // 当前容器最多能放几列
-      this.containerHeight = 0; // 初始化父容器高度
-
-      if (this.item.length < cols) {
+      if (this.item.length < this.column) {
         item.top = 0;
-        item.left = ((index - 1) % cols) * this.colsWidth;
+        item.left = ((index - 1) % this.column) * this.colsWidth;
         item.cols = index; // 所在的列
       } else {
-        for (let i = 1; i <= cols; i++) {
-          let colsHeight = 0;
-          this.item
-            .filter((item) => item.cols === i)
-            .forEach((list) => {
-              colsHeight += list.itemBoxHeight;
-            });
+        for (let i = 1; i <= this.column; i++) {
+          let colsHeight = this.calcColsHeight(i);
 
           if (!item.top || colsHeight < item.top) {
             item.top = colsHeight;
@@ -140,21 +145,13 @@ export default {
       }
 
       this.item.push(item);
-      // 在这里计算父容器的高度
-      for (let i = 1; i <= cols; i++) {
-        let colsHeight = 0;
-        this.item
-          .filter((item) => item.cols === i)
-          .forEach((list) => {
-            colsHeight += list.itemBoxHeight;
-          });
-        if (!this.containerHeight || this.containerHeight < colsHeight) {
-          this.containerHeight = colsHeight;
-        }
-      }
+      // 在这里重新计算父容器的高度
+      this.calcContainerHeight();
     },
+
     // 容器宽度改变时重新布局
     calcElement() {
+      this.calcColumn();
       let list = Array.from(this.item);
       this.item = [];
       list.forEach((item, index) => {
@@ -164,9 +161,37 @@ export default {
         this.vnodeItem(item, index + 1);
       });
     },
+
+    // 计算 container 的高度
+    calcContainerHeight() {
+      this.containerHeight = 0; // 初始化父容器高度
+
+      for (let i = 1; i <= this.column; i++) {
+        let colsHeight = this.calcColsHeight(i);
+        if (!this.containerHeight || this.containerHeight < colsHeight) {
+          this.containerHeight = colsHeight;
+        }
+      }
+    },
+
+    // 计算某一列的高度
+    calcColsHeight(cols) {
+      let colsHeight = 0;
+      this.item
+        .filter((item) => item.cols === cols)
+        .forEach((item) => {
+          colsHeight += item.imgHeight;
+        });
+      return colsHeight;
+    },
+    // 计算当前宽度下能排的列数
+    calcColumn() {
+      let elWidth = this.$el.offsetWidth; // 获取容器的宽度
+      this.column = Math.floor(elWidth / this.colsWidth); // 当前容器最多能放几列
+    },
   },
   beforeDestroy() {
-    this.erdUltraFast.removeListener(this.$el, this.calcElement);
+    erdUltraFast.removeListener(this.$el, this.calcElement);
   },
 };
 </script>
@@ -179,14 +204,14 @@ export default {
   position: absolute;
   box-sizing: border-box;
   padding: 10px;
-  animation: show-card-data-v-ded6b974 0.4s;
+  animation: show-card-data 0.4s;
   transition: left 0.6s, top 0.6s;
   transition-delay: 0.1s;
 }
 .item > img {
   width: 100%;
 }
-@keyframes show-card-data-v-ded6b974 {
+@keyframes show-card-data {
   0% {
     -webkit-transform: scale(0.5);
     transform: scale(0.5);
