@@ -189,6 +189,12 @@ export default {
       let elWidth = this.$el.offsetWidth; // 获取容器的宽度
       this.column = Math.floor(elWidth / this.colsWidth); // 当前容器最多能放几列
     },
+
+    // 清空item
+    delItem() {
+      this.item = [];
+      this.containerHeight = 0;
+    },
   },
   beforeDestroy() {
     erdUltraFast.removeListener(this.$el, this.calcElement);
