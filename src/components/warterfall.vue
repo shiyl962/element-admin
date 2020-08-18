@@ -99,9 +99,7 @@ export default {
       };
 
       items.forEach((item) => {
-        if (!this.fastWay) {
-          this.loading = true;
-        }
+        !this.fastWay ? (this.loading = true) : null;
         // 如果高度已知，就不需要预加载
         if (item.imgHeight) {
           index++;
@@ -135,7 +133,6 @@ export default {
       } else {
         for (let i = 1; i <= this.column; i++) {
           let colsHeight = this.calcColsHeight(i);
-
           if (!item.top || colsHeight < item.top) {
             item.top = colsHeight;
             item.left = (i - 1) * this.colsWidth;
