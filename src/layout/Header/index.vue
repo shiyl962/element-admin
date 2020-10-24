@@ -20,14 +20,18 @@
 
       <Screenfull class="link" />
 
-      <el-dropdown class="dropdown link" trigger="click">
+      <el-dropdown
+        class="dropdown link"
+        trigger="click"
+        @command="handleCommand"
+      >
         <span class="el-dropdown-link">
           你好，蔡海<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="a">个人中心</el-dropdown-item>
           <el-dropdown-item command="b">项目地址</el-dropdown-item>
-          <el-dropdown-item command="e" divided>退出登录</el-dropdown-item>
+          <el-dropdown-item command="c" divided>退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -37,6 +41,7 @@
 <script>
 import Breadcrumb from "./Breadcrumb";
 import Screenfull from "./Screenfull";
+import { uplogin } from "@/mock-login.js"; // 模拟登陆模块
 export default {
   components: { Breadcrumb, Screenfull },
   data() {
@@ -68,6 +73,17 @@ export default {
           classString.substr(nameIndex + className.length);
       }
       element.className = classString;
+    },
+    // 下拉菜单事件处理
+    handleCommand(command) {
+      let handle = {
+        // 登出
+        c: () => {
+          uplogin();
+          this.$router.push("/login");
+        },
+      };
+      handle[command]();
     },
   },
   watch: {
