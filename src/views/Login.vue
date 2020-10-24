@@ -52,7 +52,7 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (login(this.form.username, this.form.password)) {
-            this.$router.push("/")
+            this.$router.push("/");
           } else {
             this.$message.error("用户名或密码错误");
           }
