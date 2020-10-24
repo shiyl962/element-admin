@@ -51,7 +51,7 @@ const routes = [
         name: "About",
         component: () =>
           import(/* webpackChunkName: "about" */ "@/views/About.vue"),
-        meta: { title: "数据看板", icon: "el-icon-s-marketing", affix: true },
+        meta: { title: "数据看板", icon: "el-icon-s-marketing", affix: false },
       },
     ],
   },

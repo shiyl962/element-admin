@@ -26,6 +26,10 @@ const myVue = new Vue({
  * 判断登陆状态
  *  */
 import { validation } from "@/mock-login.js";
+if (!validation()) {
+  router.push("/login");
+}
+
 router.beforeEach((to, from, next) => {
   if (to.fullPath !== "/login") {
     if (validation()) {
