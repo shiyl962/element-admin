@@ -23,6 +23,12 @@ VueRouter.prototype.push = function push(location, onResolve, onReject) {
  */
 const routes = [
   {
+    path: "/login",
+    hidden: true,
+    component: () =>
+      import(/* webpackChunkName: "login" */ "@/views/Login.vue"),
+  },
+  {
     path: "/",
     component: Layout,
     redirect: "/index",
