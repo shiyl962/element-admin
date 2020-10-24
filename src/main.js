@@ -16,7 +16,7 @@ Vue.use(Fragment.Plugin);
 const myVue = new Vue({
   router,
   store,
-  render: function (h) {
+  render: function(h) {
     return h(App);
   },
 }).$mount("#app");
@@ -25,23 +25,30 @@ const myVue = new Vue({
  * 全局导航收尾
  * 判断登陆状态
  *  */
-import { validation } from "@/mock-login.js"
+import { validation } from "@/mock-login.js";
 router.beforeEach((to, from, next) => {
-  if (to.fullPath !== '/login') {
+  if (to.fullPath !== "/login") {
     if (validation()) {
-      next()
+      next();
     } else {
-      myVue.$confirm('当前登陆状态已过期，你可以选择登出或停留在当前页面！', '提示', {
-        confirmButtonText: '登出',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        next('/login')
-      }).catch(() => {
-        next(false)
-      });
+      myVue
+        .$confirm(
+          "当前登陆状态已过期，你可以选择登出或停留在当前页面！",
+          "提示",
+          {
+            confirmButtonText: "登出",
+            cancelButtonText: "取消",
+            type: "warning",
+          }
+        )
+        .then(() => {
+          next("/login");
+        })
+        .catch(() => {
+          next(false);
+        });
     }
   } else {
-    next()
+    next();
   }
-})
+});
