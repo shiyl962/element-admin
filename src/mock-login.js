@@ -1,9 +1,9 @@
 /*
-* 仅仅是在前端做一个模拟登录的功能
-* 它是不安全的
-*/
+ * 仅仅是在前端做一个模拟登录的功能
+ * 它是不安全的
+ */
 
-import AESEncryption from "aes-crypto";// npm i aes-crypto
+import AESEncryption from "aes-crypto"; // npm i aes-crypto
 const _encryption = new AESEncryption();
 
 //前端登录模拟
@@ -11,7 +11,7 @@ let _username = "admin";
 let _password = "password";
 let _keyContent =
   "FB32D61111CBE2D012E7A12209322CF5FB32D671D6CBE2D012E7A12209322CF5";
-let _interval = 10 * 60 * 1000;// token过期时间
+let _interval = 10 * 60 * 1000; // token过期时间
 
 // 登录
 let login = (username, password) => {
@@ -36,10 +36,10 @@ let setCookie = () => {
 };
 
 /*
-* 验证登录状态
-* 可以用来在页面跳转的时候做验证
-* 验证成功时会重置token过期时间
-*/
+ * 验证登录状态
+ * 可以用来在页面跳转的时候做验证
+ * 验证成功时会重置token过期时间
+ */
 let validation = () => {
   let cookie = document.cookie;
 
@@ -88,8 +88,4 @@ let uplogin = () => {
   document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 };
 
-export {
-  login,
-  validation,
-  uplogin,
-}
+export { login, validation, uplogin };
