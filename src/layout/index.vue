@@ -39,7 +39,7 @@ export default {
   padding: 0 !important;
 }
 .main {
-  height: calc(100vh - 100px);
+  height: calc(100vh - 101px);
   text-align: left;
 }
 </style>
