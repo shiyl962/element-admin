@@ -187,12 +187,14 @@ const store = new Vuex.Store({
 
 window.onresize = () => {
   let screenWidth = document.body.clientWidth;
-  if (store.state.facility.screenWidth >= 1200 && screenWidth < 1200) {// 从大屏切换到小屏
+  if (store.state.facility.screenWidth >= 1200 && screenWidth < 1200) {
+    // 从大屏切换到小屏
     store.commit("setCollapse", true);
-  } else if (store.state.facility.screenWidth < 1200 && screenWidth >= 1200) {// 从小屏切换到大屏
+  } else if (store.state.facility.screenWidth < 1200 && screenWidth >= 1200) {
+    // 从小屏切换到大屏
     store.commit("setCollapse", false);
   }
   store.commit("setScreenWidth", document.body.clientWidth);
-}
+};
 
 export default store;

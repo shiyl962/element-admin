@@ -17,7 +17,7 @@ Vue.use(Fragment.Plugin);
 const myVue = new Vue({
   router,
   store,
-  render: function (h) {
+  render: function(h) {
     return h(App);
   },
 }).$mount("#app");
