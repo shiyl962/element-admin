@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+import "element-ui/lib/theme-chalk/display.css";
 import "@/assets/theme/index.css"; //换肤样式
 import "@/assets/style/index.css"; //全局公共样式
 import Fragment from "vue-fragment"; // 可产生虚拟根节点
