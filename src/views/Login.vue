@@ -67,15 +67,18 @@ export default {
 
 <style scoped>
 .container {
+  width: 100%;
   display: flex;
   min-height: 100vh;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
   background-color: #2d3a4b;
 }
 .form {
-  width: 520px;
+  width: 100%;
+  max-width: 520px;
   color: #fff;
 }
 .form .title {
