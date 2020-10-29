@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "@/router";
-import { debounce } from "throttle-debounce";
+// import { debounce } from "throttle-debounce";
 
 Vue.use(Vuex);
 
@@ -185,8 +185,14 @@ const store = new Vuex.Store({
   },
 });
 
-window.onresize = debounce(150, false, () => {
+window.onresize = () => {
+  let screenWidth = document.body.clientWidth;
+  if (store.state.facility.screenWidth >= 1200 && screenWidth < 1200) {// 从大屏切换到小屏
+    store.commit("setCollapse", true);
+  } else if (store.state.facility.screenWidth < 1200 && screenWidth >= 1200) {// 从小屏切换到大屏
+    store.commit("setCollapse", false);
+  }
   store.commit("setScreenWidth", document.body.clientWidth);
-});
+}
 
 export default store;
