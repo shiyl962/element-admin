@@ -185,6 +185,10 @@ const store = new Vuex.Store({
   },
 });
 
+if (store.state.facility.screenWidth < 1200) {
+  // 小屏状态下默认收起
+  store.commit("setCollapse", true);
+}
 window.onresize = () => {
   let screenWidth = document.body.clientWidth;
   if (store.state.facility.screenWidth >= 1200 && screenWidth < 1200) {
