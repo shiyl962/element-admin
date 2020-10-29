@@ -69,12 +69,23 @@ export default {
   width: 210px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   height: 100vh;
   background-color: #304156;
   transition: width 0.5s;
 }
 .collapse {
   width: 64px;
+}
+@media screen and (max-width: 1200px) {
+  .aside {
+    position: absolute;
+    left: 0;
+    z-index: 1000;
+  }
+  .collapse {
+    width: 0px;
+  }
 }
 .aside >>> .el-menu {
   border-right: none;
