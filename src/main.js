@@ -17,7 +17,7 @@ Vue.use(Fragment.Plugin);
 const myVue = new Vue({
   router,
   store,
-  render: function(h) {
+  render: function (h) {
     return h(App);
   },
 }).$mount("#app");
@@ -30,8 +30,12 @@ import { validation } from "@/mock-login.js";
 if (!validation()) {
   router.push("/login");
 }
-
+// 全局路由守卫
 router.beforeEach((to, from, next) => {
+  // 小屏（<1200px）下路由切换时收起侧边栏
+  if (store.state.facility.screenWidth < 1200) {
+    store.commit("setCollapse", true);
+  }
   if (to.fullPath !== "/login") {
     if (validation()) {
       next();
