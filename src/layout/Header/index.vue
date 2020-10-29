@@ -77,13 +77,16 @@ export default {
     // 下拉菜单事件处理
     handleCommand(command) {
       let handle = {
+        b: () => {
+          window.open("https://github.com/caihai123/element-admin");
+        },
         // 登出
         c: () => {
           uplogin();
           this.$router.push("/login");
         },
       };
-      handle[command]();
+      handle[command] && handle[command]();
     },
   },
   watch: {
