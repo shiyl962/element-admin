@@ -11,7 +11,7 @@
       </div>
       <Breadcrumb />
     </div>
-    <div>
+    <div class="hidden-md-and-down">
       <div>
         <!-- <el-tooltip effect="dark" content="换肤" placement="bottom"> -->
         <el-switch v-model="value"> </el-switch>
