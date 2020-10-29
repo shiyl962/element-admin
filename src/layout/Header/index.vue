@@ -11,17 +11,17 @@
       </div>
       <Breadcrumb />
     </div>
-    <div class="hidden-md-and-down">
-      <div>
+    <div>
+      <div class="hidden-xs-only">
         <!-- <el-tooltip effect="dark" content="换肤" placement="bottom"> -->
         <el-switch v-model="value"> </el-switch>
         <!-- </el-tooltip> -->
       </div>
 
-      <Screenfull class="link" />
+      <Screenfull class="link hidden-xs-only" />
 
       <el-dropdown
-        class="dropdown link"
+        class="dropdown link hidden-xs-only"
         trigger="click"
         @command="handleCommand"
       >

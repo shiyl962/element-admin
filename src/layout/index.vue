@@ -9,7 +9,7 @@
     <el-container>
       <el-header class="el-header" height="auto">
         <Header />
-        <Tabs class="hidden-md-and-down" />
+        <Tabs class="hidden-xs-only" />
       </el-header>
 
       <el-main class="main">
@@ -72,7 +72,7 @@ export default {
     top: 0;
     background: #000;
     opacity: 0.3;
-    z-index: 999;
+    z-index: 1999;
   }
 }
 </style>

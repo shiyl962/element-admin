@@ -81,7 +81,7 @@ export default {
   .aside {
     position: absolute;
     left: 0;
-    z-index: 1000;
+    z-index: 2000;
   }
   .collapse {
     width: 0px;
