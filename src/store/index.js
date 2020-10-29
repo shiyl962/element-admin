@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "@/router";
+import { debounce } from "throttle-debounce";
 
 Vue.use(Vuex);
 
@@ -165,9 +166,27 @@ const layout = {
   },
 };
 
+// 设备信息
+const facility = {
+  state: {
+    screenWidth: document.body.clientWidth,
+  },
+  mutations: {
+    setScreenWidth(state, width) {
+      state.screenWidth = width;
+    },
+  },
+};
+
 const store = new Vuex.Store({
   modules: {
     layout,
+    facility,
   },
 });
+
+window.onresize = debounce(150, false, () => {
+  store.commit("setScreenWidth", document.body.clientWidth);
+});
+
 export default store;
