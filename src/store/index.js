@@ -1,12 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "@/router";
-import { debounce } from "throttle-debounce";
 
 Vue.use(Vuex);
 
-// 将树形数组递归成一维数组
-const flattenDeep = (array) => {
+// 将树转成一维数组
+const flattenDeep = (array = []) => {
   let list = [];
   array.forEach((item) => deep(item));
 
@@ -21,31 +20,30 @@ const flattenDeep = (array) => {
   return list;
 };
 
-// 获取所有路由
-let routerList = flattenDeep(router.history.router.options.routes);
+// 将路由和后端路由表对应
+const mappingRouter = (routerList, menulist) => {
+  const find = routerList.find((item) => item.path === "/");
 
-// 默认的tabs affix = true
-const defaultTabs = [];
+  find.children.forEach((item) => {
+    let find = menulist.find((i) => i.path === item.path);
+    if (find) {
+      find.name = item.name;
+      item.meta.title = find.title || item.meta.title || "";
+      item.meta.icon = find.icon || item.meta.icon || "";
+      item.meta.affix = find.affix || item.meta.affix;
+      item.meta.permission = true;
+    }
+  });
+};
 
-// 默认的缓存
-const defaultInclude = [];
+let routerList = router.history.router.options.routes; // 前端注册的路由表
 
-routerList.forEach((item) => {
-  if (item.meta && item.meta.title && item.name && item.meta.affix) {
-    defaultTabs.push({
-      to: item.path,
-      name: item.name,
-      title: item.meta.title,
-      affix: true,
-    });
-    defaultInclude.push(item.name);
-  }
-});
+let defaultInclude = []; // 默认的缓存
 
 let history = null; // 在tabs改变的时候记录之前的状态
 
 // tabs 改变之后可能需要改变路由
-let goRouter = () => {
+function goRouter() {
   let fullPath = router.currentRoute.fullPath; //获取当前的路由
   let tabs = store.state.layout.tabs;
 
@@ -70,13 +68,14 @@ let goRouter = () => {
    * 走到这里说明当前路由后面的tabs全部被删除或者根本就没有
    */
   router.push(tabs[tabs.length - 1].to);
-};
+}
 
 const layout = {
   state: {
     isCollapse: false, //控制侧边栏展开收起状态
-    tabs: Array.from(defaultTabs), //tabs列表
-    include: Array.from(defaultInclude), //tab缓存
+    menuList: [], // 侧边栏菜单对应的一维数组
+    tabs: [], //tabs列表
+    include: [], //tab缓存
   },
   mutations: {
     setCollapse(state, collapse) {
@@ -163,6 +162,29 @@ const layout = {
     replaceTabs(state, tabs) {
       state.tabs = tabs;
     },
+
+    setMenuList(state, list) {
+      state.menuList = Array.from(list);
+
+      mappingRouter(routerList, flattenDeep(list));
+
+      state.tabs = [];
+      state.include = [];
+      defaultInclude = [];
+
+      list.forEach((item) => {
+        if (item.title && item.name && item.affix) {
+          state.tabs.push({
+            to: item.path,
+            name: item.name,
+            title: item.title,
+            affix: true,
+          });
+          state.include.push(item.name);
+          defaultInclude.push(item.name);
+        }
+      });
+    },
   },
 };
 
@@ -183,22 +205,6 @@ const store = new Vuex.Store({
     layout,
     facility,
   },
-});
-
-if (store.state.facility.screenWidth < 1200) {
-  // 小屏状态下默认收起
-  store.commit("setCollapse", true);
-}
-window.onresize = debounce(150, false, () => {
-  let screenWidth = document.body.clientWidth;
-  if (store.state.facility.screenWidth >= 1200 && screenWidth < 1200) {
-    // 从大屏切换到小屏
-    store.commit("setCollapse", true);
-  } else if (store.state.facility.screenWidth < 1200 && screenWidth >= 1200) {
-    // 从小屏切换到大屏
-    store.commit("setCollapse", false);
-  }
-  store.commit("setScreenWidth", document.body.clientWidth);
 });
 
 export default store;

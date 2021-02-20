@@ -82,7 +82,7 @@ export default {
   methods: {
     moveToCurrentTag() {
       this.$nextTick(() => {
-        const tags = this.$refs.tag;
+        const tags = this.$refs.tag || [];
         for (const tag of tags) {
           if (tag.to === this.$route.path) {
             this.$refs.scrollPane.moveCenter(tag);

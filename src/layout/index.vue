@@ -57,7 +57,7 @@ export default {
   padding: 0 !important;
 }
 .main {
-  height: calc(100vh - 101px);
+  height: calc(100vh - 110px);
   text-align: left;
 }
 .drawer-bg {

@@ -16,7 +16,7 @@
         :default-active="activeMenu"
       >
         <MenuItem
-          v-for="(route, index) in routeList"
+          v-for="(route, index) in menulist"
           :key="index"
           :item="route"
         ></MenuItem>
@@ -35,16 +35,42 @@
 
 <script>
 import MenuItem from "./MenuItem";
+import { debounce } from "throttle-debounce";
+
+// 自适应侧边栏断点，修改时还需要修改对应的css
+const minWidth = 1200;
+
 export default {
   components: { MenuItem },
+  data() {
+    return {
+      resizeEnet: debounce(150, false, () => {
+        let screenWidth = document.body.clientWidth;
+        if (
+          this.$store.state.facility.screenWidth >= minWidth &&
+          screenWidth < minWidth
+        ) {
+          // 从大屏切换到小屏
+          this.$store.commit("setCollapse", true);
+        } else if (
+          this.$store.state.facility.screenWidth < minWidth &&
+          screenWidth >= minWidth
+        ) {
+          // 从小屏切换到大屏
+          this.$store.commit("setCollapse", false);
+        }
+        this.$store.commit("setScreenWidth", document.body.clientWidth);
+      }),
+    };
+  },
   computed: {
     //控制侧边栏展开收起状态
     isCollapse() {
       return this.$store.state.layout.isCollapse;
     },
-    //获取所有路由表
-    routeList() {
-      return this.$router.options.routes;
+    //获取后端路由表
+    menulist() {
+      return this.$store.state.layout.menuList;
     },
     activeMenu() {
       const route = this.$route;
@@ -55,11 +81,22 @@ export default {
       return path;
     },
   },
+  mounted() {
+    if (this.$store.state.facility.screenWidth < minWidth) {
+      // 小屏状态下默认收起
+      this.$store.commit("setCollapse", true);
+    }
+
+    window.addEventListener("resize", this.resizeEnet);
+  },
   methods: {
     // 控制侧边栏导航
     setCollapse(collapse) {
       this.$store.commit("setCollapse", collapse);
     },
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.resizeEnet);
   },
 };
 </script>

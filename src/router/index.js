@@ -20,6 +20,7 @@ VueRouter.prototype.push = function push(location, onResolve, onReject) {
  * affix 在tabs中不能被删除，最少且必须有一个
  * hidden 不会出现在侧边栏
  * name 必须与组件name一致，用于路由缓存功能
+ * permission 为布尔时表示需要权限,默认值应该为 false，待后端返回相应的地址后会自动改为 true
  */
 const routes = [
   {
@@ -38,48 +39,37 @@ const routes = [
         name: "Home",
         component: () =>
           import(/* webpackChunkName: "home" */ "@/views/Home.vue"),
-        meta: { title: "首页", icon: "el-icon-s-marketing", affix: true },
+        meta: { permission: false },
       },
-    ],
-  },
-  {
-    path: "/",
-    component: Layout,
-    children: [
       {
         path: "/about",
         name: "About",
         component: () =>
           import(/* webpackChunkName: "about" */ "@/views/About.vue"),
-        meta: { title: "数据看板", icon: "el-icon-s-marketing", affix: false },
+        meta: { permission: false },
       },
-    ],
-  },
-  {
-    path: "/",
-    component: Layout,
-    meta: { title: "嵌套路由", icon: "el-icon-s-marketing" },
-    children: [
       {
         path: "/menu1",
         name: "Menu1",
         component: () =>
           import(/* webpackChunkName: "menu" */ "@/views/Menu1.vue"),
-        meta: { title: "回到顶部", icon: "el-icon-s-marketing" },
+        meta: { permission: false },
       },
       {
         path: "/menu2",
         name: "Menu2",
         component: () =>
           import(/* webpackChunkName: "menu" */ "@/views/Menu2.vue"),
-        meta: { title: "换肤预览", icon: "el-icon-s-marketing" },
+        meta: { permission: false },
       },
       {
         path: "/menu3",
         name: "Menu3",
         component: () =>
           import(/* webpackChunkName: "menu" */ "@/views/Menu3.vue"),
-        meta: { title: "菜单3", icon: "el-icon-s-marketing" },
+        meta: {
+          permission: false,
+        },
       },
     ],
   },
