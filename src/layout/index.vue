@@ -9,7 +9,7 @@
     <el-container>
       <el-header class="el-header" height="auto">
         <Header />
-        <Tabs class="hidden-xs-only" />
+        <Tabs />
       </el-header>
 
       <el-main class="main">
@@ -57,7 +57,7 @@ export default {
   padding: 0 !important;
 }
 .main {
-  height: calc(100vh - 110px);
+  height: calc(100vh - 100px);
   text-align: left;
 }
 .drawer-bg {
