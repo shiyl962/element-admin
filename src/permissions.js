@@ -35,7 +35,7 @@ router.beforeEach(async (to, from, next) => {
         if (to.meta.permission) {
           next();
         } else {
-          next(false); // 无权限
+          next("/401"); // 无权限
         }
       }
     } else {

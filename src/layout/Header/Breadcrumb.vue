@@ -20,14 +20,26 @@ import { treeFilter } from "@/utils/util";
 export default {
   computed: {
     levelList() {
-      const { path } = this.$route;
+      const { path, matched } = this.$route;
 
       const list = treeFilter(
         this.$store.state.layout.menuList,
         (item) => item.path && item.path === path
       );
 
-      return this.treeTOList(list);
+      let levelList = this.treeTOList(list);
+      if (levelList.length) {
+        return levelList;
+      } else {
+        return matched
+          .filter((item) => item.meta && item.meta.title)
+          .map((item) => {
+            return {
+              path: item.path,
+              title: item.meta.title,
+            };
+          });
+      }
     },
   },
   methods: {
@@ -36,11 +48,15 @@ export default {
       const list = [];
       while (treeList) {
         let item = treeList[0];
-        list.push({
-          title: item.title,
-          path: item.path,
-        });
-        treeList = item.children;
+        if (item) {
+          list.push({
+            title: item.title,
+            path: item.path,
+          });
+          treeList = item.children;
+        } else {
+          treeList = null;
+        }
       }
       return list;
     },

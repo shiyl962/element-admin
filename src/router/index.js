@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Layout from "@/layout";
+import view from "./module/view";
+import error from "./module/error";
 
 Vue.use(VueRouter);
 
@@ -33,45 +35,7 @@ const routes = [
     path: "/",
     component: Layout,
     redirect: "/index",
-    children: [
-      {
-        path: "/index",
-        name: "Home",
-        component: () =>
-          import(/* webpackChunkName: "home" */ "@/views/Home.vue"),
-        meta: { permission: false },
-      },
-      {
-        path: "/about",
-        name: "About",
-        component: () =>
-          import(/* webpackChunkName: "about" */ "@/views/About.vue"),
-        meta: { permission: false },
-      },
-      {
-        path: "/menu1",
-        name: "Menu1",
-        component: () =>
-          import(/* webpackChunkName: "menu" */ "@/views/Menu1.vue"),
-        meta: { permission: false },
-      },
-      {
-        path: "/menu2",
-        name: "Menu2",
-        component: () =>
-          import(/* webpackChunkName: "menu" */ "@/views/Menu2.vue"),
-        meta: { permission: false },
-      },
-      {
-        path: "/menu3",
-        name: "Menu3",
-        component: () =>
-          import(/* webpackChunkName: "menu" */ "@/views/Menu3.vue"),
-        meta: {
-          permission: false,
-        },
-      },
-    ],
+    children: [...view, ...error],
   },
   {
     path: "/redirect",
@@ -85,6 +49,7 @@ const routes = [
       },
     ],
   },
+  { path: "*", redirect: "/404" },
 ];
 
 const router = new VueRouter({

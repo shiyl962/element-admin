@@ -101,6 +101,7 @@ export default {
 }
 .box {
   width: calc(100% - 39px);
+  height: 40px;
   position: relative;
   white-space: nowrap;
   overflow: auto;

@@ -31,7 +31,7 @@ const mappingRouter = (routerList, menulist) => {
       item.meta.title = find.title || item.meta.title || "";
       item.meta.icon = find.icon || item.meta.icon || "";
       item.meta.affix = find.affix || item.meta.affix;
-      item.meta.permission = true;
+      item.meta.permission = find.permission === false ? false : true;
     }
   });
 };
