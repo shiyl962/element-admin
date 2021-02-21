@@ -19,8 +19,6 @@ VueRouter.prototype.push = function push(location, onResolve, onReject) {
 };
 /**
  * 所有页面都应该是一级页面，或者说必须直接渲染到layout上，否则没有缓存
- * affix 在tabs中不能被删除，最少且必须有一个
- * hidden 不会出现在侧边栏
  * name 必须与组件name一致，用于路由缓存功能
  * permission 为布尔时表示需要权限,默认值应该为 false，待后端返回相应的地址后会自动改为 true
  */
