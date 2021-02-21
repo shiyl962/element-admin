@@ -103,6 +103,7 @@ const layout = {
     // 添加tabs
     addTabs(state, route) {
       history = Array.from(state.tabs);
+      // 只要页面存在title和name就会生成tab
       if (route.meta && route.meta.title && route.name) {
         if (!state.tabs.some((item) => item.to === route.fullPath)) {
           let tab = {

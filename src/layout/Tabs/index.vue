@@ -147,7 +147,6 @@ export default {
   },
   watch: {
     $route() {
-      //这样操作之后用任意方式打开的页面均会生成tabs页面，考虑到后期很多页面是不需要打开tabs的，后期应该在路由表中添加是否在tabs中打开的标识
       this.$store.commit("addTabs", this.$route);
       this.moveToCurrentTag();
     },

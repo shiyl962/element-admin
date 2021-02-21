@@ -7,6 +7,7 @@
 
 <script>
 export default {
+  name: "401",
   components: {},
   props: {},
   data() {
