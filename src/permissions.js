@@ -1,3 +1,4 @@
+import Vue from "vue";
 import router from "@/router";
 import store from "@/store";
 import { getMenuList } from "@/api/index";
@@ -19,11 +20,6 @@ if (!validation()) {
 // 全局路由守卫
 // 用于判断权限
 router.beforeEach(async (to, from, next) => {
-  // 小屏下路由切换时收起侧边栏
-  if (store.state.facility.screenWidth < 1200) {
-    store.commit("setCollapse", true);
-  }
-
   NProgress.start();
   if (typeof to.meta.permission === "boolean") {
     // 判断前端模拟的登录状态
@@ -46,6 +42,29 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     next(); // 不需要权限验证的页面
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  // 小屏下路由切换时收起侧边栏
+  if (store.state.facility.screenWidth < 1200) {
+    store.commit("setCollapse", true);
+  }
+
+  /**
+   * 处理携带参数的路由
+   * 如果当前页面tab已存在，但是参数不一样的话会删除缓存再进入
+   * 只处理了通过query传参，其他的最好不要使用
+   */
+  const found = store.state.layout.tabs.find((item) => item.path === to.path);
+  if (found && found.to !== to.fullPath) {
+    store.commit("setRedirectName", to.name);
+    Vue.nextTick(() => {
+      next();
+      store.commit("setRedirectName", "");
+    });
+  } else {
+    next();
   }
 });
 
