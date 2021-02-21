@@ -94,12 +94,16 @@ const layout = {
       history = Array.from(state.tabs);
       // 只要页面存在title和name就会生成tab
       if (route.meta && route.meta.title && route.name) {
-        if (!state.tabs.some((item) => item.to === route.fullPath)) {
-          let tab = {
-            to: route.fullPath,
-            name: route.name,
-            title: route.meta.title,
-          };
+        const index = state.tabs.findIndex((item) => item.path === route.path);
+        const tab = {
+          path: route.path,
+          to: route.fullPath,
+          name: route.name,
+          title: route.meta.title,
+        };
+        if (index !== -1) {
+          Vue.set(state.tabs, index, tab);
+        } else {
           state.tabs.push(tab);
         }
       }
@@ -156,6 +160,7 @@ const layout = {
       list.forEach((item) => {
         if (item.title && item.name && item.affix) {
           state.tabs.push({
+            path: item.path,
             to: item.path,
             name: item.name,
             title: item.title,
