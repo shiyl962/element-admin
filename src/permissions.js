@@ -34,6 +34,7 @@ router.beforeEach(async (to, from, next) => {
         if (to.meta.permission) {
           next();
         } else {
+          NProgress.done();
           next("/401"); // 无权限
         }
       }
