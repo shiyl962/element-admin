@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "401",
+  name: "Err401",
   components: {},
   props: {},
   data() {
