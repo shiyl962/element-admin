@@ -20,8 +20,8 @@
         placement="bottom"
       >
         <el-switch
-          active-color="#409EFF"
-          inactive-color="#0a0a0a"
+          active-color="#0a0a0a"
+          inactive-color="#409EFF"
           v-model="value"
         >
         </el-switch>
