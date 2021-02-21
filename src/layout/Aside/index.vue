@@ -106,7 +106,6 @@ export default {
   width: 210px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   height: 100vh;
   background-color: #304156;
   transition: width 0.5s;
@@ -162,15 +161,17 @@ export default {
 
 /* logo样式 */
 .sider-logo {
+  height: 60px;
   display: flex;
   align-items: center;
-  padding: 16px;
+  overflow: hidden;
   line-height: 32px;
   cursor: pointer;
   transition: padding 0.2s;
   background: hsla(0, 0%, 100%, 0.2);
 }
 .sider-logo a {
+  margin-left: 16px;
   display: flex;
 }
 .sider-logo img {
