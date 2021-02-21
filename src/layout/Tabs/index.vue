@@ -113,7 +113,7 @@ export default {
     },
     //刷新
     refresh(item) {
-      this.$store.commit("delInclude", item.name);
+      this.$store.commit("setRedirectName", item.name);
       this.$nextTick(() => {
         this.$router.replace({
           path: "/redirect" + item.to,

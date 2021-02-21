@@ -38,8 +38,6 @@ const mappingRouter = (routerList, menulist) => {
 
 let routerList = router.history.router.options.routes; // 前端注册的路由表
 
-let defaultInclude = []; // 默认的缓存
-
 let history = null; // 在tabs改变的时候记录之前的状态
 
 // tabs 改变之后可能需要改变路由
@@ -75,31 +73,22 @@ const layout = {
     isCollapse: false, //控制侧边栏展开收起状态
     menuList: [], // 侧边栏菜单对应的一维数组
     tabs: [], //tabs列表
-    include: [], //tab缓存
+    redirectName: "", // 正在刷新的name
+  },
+  getters: {
+    include: (state) =>
+      state.tabs
+        .map((item) => item.name)
+        .filter((item) => item !== state.redirectName),
   },
   mutations: {
     setCollapse(state, collapse) {
       state.isCollapse = collapse;
     },
-
-    // 添加缓存
-    addInclude(state, name) {
-      if (name && !state.include.some((item) => item === name)) {
-        state.include.push(name);
-      }
+    // 删除某一个缓存，用于刷新
+    setRedirectName(state, name) {
+      state.redirectName = name;
     },
-
-    // 删除缓存
-    delInclude(state, name) {
-      if (!name) return;
-      state.include = state.include.filter((item) => item !== name);
-    },
-
-    // 恢复默认
-    emptyInclude(state) {
-      state.include = [...defaultInclude];
-    },
-
     // 添加tabs
     addTabs(state, route) {
       history = Array.from(state.tabs);
@@ -112,10 +101,6 @@ const layout = {
             title: route.meta.title,
           };
           state.tabs.push(tab);
-        }
-        // 添加缓存
-        if (route.name && !state.include.some((item) => item === route.name)) {
-          state.include.push(route.name);
         }
       }
     },
@@ -131,8 +116,7 @@ const layout = {
         }
         return false;
       });
-      // 删除缓存
-      state.include = state.include.filter((item) => item !== route.name);
+
       goRouter();
     },
 
@@ -143,7 +127,6 @@ const layout = {
       state.tabs = state.tabs.filter(
         (item) => item.affix || item.to === route.to
       );
-      state.include = state.tabs.map((item) => item.name);
       goRouter();
     },
 
@@ -155,7 +138,6 @@ const layout = {
     emptyTabs(state) {
       history = [...state.tabs];
       state.tabs = state.tabs.filter((item) => item.affix);
-      state.include = [...defaultInclude];
       goRouter();
     },
 
@@ -170,8 +152,6 @@ const layout = {
       mappingRouter(routerList, flattenDeep(list));
 
       state.tabs = [];
-      state.include = [];
-      defaultInclude = [];
 
       list.forEach((item) => {
         if (item.title && item.name && item.affix) {
@@ -181,8 +161,6 @@ const layout = {
             title: item.title,
             affix: true,
           });
-          state.include.push(item.name);
-          defaultInclude.push(item.name);
         }
       });
     },
