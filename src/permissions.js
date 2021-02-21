@@ -1,6 +1,8 @@
 import router from "@/router";
 import store from "@/store";
 import { getMenuList } from "@/api/index";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css"; // progress bar style
 
 // 获取后端路由表
 const setMenulist = async () => {
@@ -22,6 +24,7 @@ router.beforeEach(async (to, from, next) => {
     store.commit("setCollapse", true);
   }
 
+  NProgress.start();
   if (typeof to.meta.permission === "boolean") {
     // 判断前端模拟的登录状态
     // 正式使用时应去掉这一层判断，
@@ -33,15 +36,19 @@ router.beforeEach(async (to, from, next) => {
         next({ path: to.fullPath, replace: true }); //重新进入此路由，replace设置为true之后浏览器不会有多余的历史记录
       } else {
         if (to.meta.permission) {
+          NProgress.done();
           next();
         } else {
+          NProgress.done();
           next("/401"); // 无权限
         }
       }
     } else {
+      NProgress.done();
       next("/login");
     }
   } else {
+    NProgress.done();
     next(); // 不需要权限验证的页面
   }
 });

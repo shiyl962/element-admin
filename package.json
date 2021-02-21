@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "element-resize-detector": "^1.2.1",
     "element-ui": "^2.13.2",
+    "nprogress": "^0.2.0",
     "screenfull": "^5.0.2",
     "throttle-debounce": "^3.0.0",
     "vue": "^2.6.11",
