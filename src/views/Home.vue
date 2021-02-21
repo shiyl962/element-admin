@@ -2,7 +2,7 @@
   <div class="home">
     <h1 style="font-size:2em">介绍</h1>
     <p>
-      这是一个后台管理系统的前端模板，参考了
+      这是一个干净的，简单的后台管理系统的前端模板，参考了
       <el-link
         type="primary"
         href="https://panjiachen.gitee.io/vue-element-admin-site/zh/"
@@ -145,7 +145,12 @@
     <h2>模拟登录</h2>
     <p>
       这是一个纯前端项目，目前唯一的一个获取菜单的接口我都是调用的github上的一个静态json，但是没法模拟登录，
-      但是为了这个项目能更好的演示，我写了一个前端模拟的登录，正式使用时需要删除这部分代码，超级简单，就不详细说了。。。
+      但是为了这个项目能更好的演示，我写了一个前端模拟的登录，正式使用时需要删除
+      mock-login.js 相关代码，超级简单，就不详细说了。。。
+    </p>
+    <p>
+      aes-crypto 插件也仅在 mock-login.js 中有使用，如果你希望 package.json
+      更干净也可以一并删除。
     </p>
   </div>
 </template>
