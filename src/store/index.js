@@ -100,6 +100,7 @@ const layout = {
           to: route.fullPath,
           name: route.name,
           title: route.meta.title,
+          affix: route.meta.affix,
         };
         if (index !== -1) {
           Vue.set(state.tabs, index, tab);
