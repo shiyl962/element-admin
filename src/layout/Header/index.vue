@@ -12,8 +12,19 @@
       <Breadcrumb />
     </div>
     <div>
-      <el-tooltip class="link" effect="dark" content="换肤" placement="bottom">
-        <el-switch v-model="value"> </el-switch>
+      <el-tooltip
+        class="link"
+        style="height:60px"
+        effect="dark"
+        content="换肤"
+        placement="bottom"
+      >
+        <el-switch
+          active-color="#409EFF"
+          inactive-color="#0a0a0a"
+          v-model="value"
+        >
+        </el-switch>
       </el-tooltip>
 
       <div class="link">
