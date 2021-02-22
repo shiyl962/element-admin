@@ -11,7 +11,7 @@ const setMenulist = async () => {
   store.commit("setMenuList", data.data);
 };
 
-/**判断前端模拟的登录状态 */
+/**判断前端模拟的登录状态 正式使用时直接删除*/
 import { validation } from "@/mock-login.js";
 if (!validation()) {
   router.push("/login");
@@ -33,16 +33,19 @@ router.beforeEach(async (to, from, next) => {
       } else {
         if (to.meta.permission) {
           next();
-        } else {
           NProgress.done();
+        } else {
           next("/401"); // 无权限
+          NProgress.done();
         }
       }
     } else {
       next("/login");
+      NProgress.done();
     }
   } else {
     next(); // 不需要权限验证的页面
+    NProgress.done();
   }
 });
 
@@ -63,9 +66,11 @@ router.beforeEach((to, from, next) => {
     Vue.nextTick(() => {
       next();
       store.commit("setRedirectName", "");
+      NProgress.done();
     });
   } else {
     next();
+    NProgress.done();
   }
 });
 
