@@ -17,6 +17,7 @@
           ></el-input>
           <div class="item-box">
             <div
+              @click="handleClipboard(item, $event)"
               class="icon-item"
               v-for="item in elIcon.filter(
                 (item) =>
@@ -26,6 +27,7 @@
               :key="item"
             >
               <i :class="item"></i>
+              <span>{{ item }}</span>
             </div>
           </div>
         </el-tab-pane>
@@ -36,9 +38,8 @@
 
 <script>
 import elIconList from "@/assets/js/el-icon";
+import clipboard from "@/utils/clipboard";
 export default {
-  components: {},
-  props: {},
   data() {
     return {
       searchValue: "",
@@ -46,11 +47,11 @@ export default {
       elIcon: elIconList,
     };
   },
-  computed: {},
-  created() {},
-  mounted() {},
-  methods: {},
-  watch: {},
+  methods: {
+    handleClipboard(text, event) {
+      clipboard(text, event);
+    },
+  },
 };
 </script>
 
@@ -62,18 +63,34 @@ export default {
   width: 300px;
 }
 .item-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   margin-top: 20px;
   border-radius: 4px;
+  border-top: 1px solid #eee;
 }
 .icon-item {
-  display: inline-block;
-  width: 120px;
   height: 120px;
+  padding: 0 10px;
   line-height: 120px;
   text-align: center;
   border: 1px solid #eee;
-  margin-bottom: -1px;
+  margin-top: -1px;
   margin-right: -1px;
+  cursor: pointer;
+}
+.icon-item:hover {
+  color: #409eff;
+}
+.icon-item i {
+  display: block;
+  height: 80px;
+  line-height: 80px;
   font-size: 32px;
+}
+.icon-item span {
+  display: block;
+  height: 40px;
+  line-height: 20px;
 }
 </style>
