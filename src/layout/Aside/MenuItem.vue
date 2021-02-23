@@ -2,7 +2,7 @@
 <template>
   <fragment v-if="!item.hidden">
     <template v-if="item.children">
-      <el-submenu v-if="item.children.length > 1" index="/">
+      <el-submenu v-if="item.children.length > 1" :index="item.title">
         <template slot="title">
           <i :class="item.icon"></i>
           <span>{{ item.title }}</span>
