@@ -32,7 +32,7 @@ const builtPage = [
   },
   {
     path: "/icon",
-    name: "icon",
+    name: "Icon",
     component: () => import(/* webpackChunkName: "icon" */ "@/views/icon.vue"),
     meta: { permission: false },
   },
