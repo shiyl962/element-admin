@@ -4,7 +4,7 @@
       <el-input
         v-model="searchValue"
         suffix-icon="el-icon-search"
-        placeholder="在次搜索图标，点击图标可复制"
+        placeholder="在此搜索图标，点击图标可复制"
         style="width: 300px"
       ></el-input>
     </el-tab-pane>
@@ -12,7 +12,7 @@
       <el-input
         v-model="searchValue"
         suffix-icon="el-icon-search"
-        placeholder="在次搜索图标，点击图标可复制"
+        placeholder="在此搜索图标，点击图标可复制"
         style="width: 300px"
       ></el-input>
       <div class="item-box">
