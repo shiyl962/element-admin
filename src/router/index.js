@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Layout from "@/layout";
 import view from "./module/view";
-import error from "./module/error";
+import Pages from "./module/pages";
 
 Vue.use(VueRouter);
 
@@ -33,7 +33,7 @@ const routes = [
     path: "/",
     component: Layout,
     redirect: "/index",
-    children: [...view, ...error],
+    children: [...view, ...Pages],
   },
   {
     path: "/redirect",
