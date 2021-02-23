@@ -30,6 +30,12 @@ const builtPage = [
       import(/* webpackChunkName: "account" */ "@/views/permis/Account.vue"),
     meta: { permission: false },
   },
+  {
+    path: "/icon",
+    name: "icon",
+    component: () => import(/* webpackChunkName: "icon" */ "@/views/icon.vue"),
+    meta: { permission: false },
+  },
 ];
 
 // 业务页面，正式使用时应该被重置
