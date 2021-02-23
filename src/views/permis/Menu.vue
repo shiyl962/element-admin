@@ -1,76 +1,71 @@
 <template>
-  <div>
-    <el-table :data="filterTableData" border stripe style="width: 100%">
-      <div slot="append" class="tab-footer">
-        <el-button
-          @click="addMenuItem"
-          type="primary"
-          icon="el-icon-document-add"
-          >新 增</el-button
-        >
-      </div>
-      <el-table-column type="index" label="#"> </el-table-column>
-      <el-table-column label="菜单名称">
-        <TableEditItem
-          :ref="'rowTitle' + scope.$index"
-          slot-scope="scope"
-          :edit="scope.row.edit"
-          v-model="scope.row.title"
-          placeholder="菜单名"
-        ></TableEditItem>
-      </el-table-column>
-      <el-table-column label="路径">
-        <TableEditItem
-          :ref="'rowPath' + scope.$index"
-          slot-scope="scope"
-          :edit="scope.row.edit"
-          v-model="scope.row.path"
-          placeholder="路径"
-        ></TableEditItem>
-      </el-table-column>
-      <el-table-column label="图标">
-        <TableEditItem
-          :ref="'rowIcon' + scope.$index"
-          slot-scope="scope"
-          type="icon"
-          :edit="scope.row.edit"
-          v-model="scope.row.icon"
-          placeholder="图标"
-        ></TableEditItem>
-      </el-table-column>
+  <el-table :data="filterTableData" border stripe style="width: 100%">
+    <div slot="append" class="tab-footer">
+      <el-button @click="addMenuItem" type="primary" icon="el-icon-document-add"
+        >新 增</el-button
+      >
+    </div>
+    <el-table-column type="index" label="#"> </el-table-column>
+    <el-table-column label="菜单名称">
+      <TableEditItem
+        :ref="'rowTitle' + scope.$index"
+        slot-scope="scope"
+        :edit="scope.row.edit"
+        v-model="scope.row.title"
+        placeholder="菜单名"
+      ></TableEditItem>
+    </el-table-column>
+    <el-table-column label="路径">
+      <TableEditItem
+        :ref="'rowPath' + scope.$index"
+        slot-scope="scope"
+        :edit="scope.row.edit"
+        v-model="scope.row.path"
+        placeholder="路径"
+      ></TableEditItem>
+    </el-table-column>
+    <el-table-column label="图标">
+      <TableEditItem
+        :ref="'rowIcon' + scope.$index"
+        slot-scope="scope"
+        type="icon"
+        :edit="scope.row.edit"
+        v-model="scope.row.icon"
+        placeholder="图标"
+      ></TableEditItem>
+    </el-table-column>
 
-      <el-table-column label="操作">
-        <!-- eslint-disable-next-line vue/no-unused-vars -->
-        <div class="box-flex" slot="header" slot-scope="scope">
-          <el-input
-            v-model="searchValue"
-            clearable
-            placeholder="输入关键字搜索"
-          />
-        </div>
-        <template slot-scope="scope">
-          <template v-if="scope.row.edit">
-            <el-button @click="submit(scope)" size="small" type="primary">
-              保存
-            </el-button>
-            <el-button @click="editCancel(scope)" size="small">取消</el-button>
-          </template>
-          <el-button
-            v-else
-            @click="scope.row.edit = true"
-            size="small"
-            type="primary"
-            plain
-          >
-            编辑
+    <el-table-column label="操作">
+      <!-- eslint-disable-next-line vue/no-unused-vars -->
+      <div class="box-flex" slot="header" slot-scope="scope">
+        <el-input
+          v-model="searchValue"
+          clearable
+          placeholder="输入关键字搜索"
+        />
+      </div>
+      <template slot-scope="scope">
+        <template v-if="scope.row.edit">
+          <el-button @click="submit(scope)" size="small" type="primary">
+            保存
           </el-button>
-          <el-button v-if="!scope.row.isAdd" type="danger" size="small">
-            删除
-          </el-button>
+          <el-button @click="editCancel(scope)" size="small">取消</el-button>
         </template>
-      </el-table-column>
-    </el-table>
-  </div>
+        <el-button
+          v-else
+          @click="scope.row.edit = true"
+          size="small"
+          type="primary"
+          plain
+        >
+          编辑
+        </el-button>
+        <el-button v-if="!scope.row.isAdd" type="danger" size="small">
+          删除
+        </el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script>
