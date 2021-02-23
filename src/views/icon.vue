@@ -38,6 +38,7 @@
 import elIconList from "@/assets/js/el-icon";
 import clipboard from "@/utils/clipboard";
 export default {
+  name: "Icon",
   data() {
     return {
       searchValue: "",
