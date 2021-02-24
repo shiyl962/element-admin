@@ -8,30 +8,45 @@
       <template slot-scope="scope">
         <!-- 编辑时 -->
         <template v-if="item.edit && scope.row._edit">
-          <el-select
+          <CheckItem
             v-if="item.type === 'select'"
-            v-model="scope.row[item.key]"
-            :placeholder="item.placeholder || '请选择'"
+            :value="scope.row[item.key]"
+            :rules="item.rules"
+            :ref="'chechItem-' + scope.$index"
           >
-            <el-option
-              v-for="i in item.options"
-              :key="i.value"
-              :label="i.label"
-              :value="i.value"
+            <el-select
+              v-model="scope.row[item.key]"
+              :placeholder="item.placeholder || '请选择'"
+              :clearable="item.clearable"
             >
-            </el-option>
-          </el-select>
+              <el-option
+                v-for="i in item.options"
+                :key="i.value"
+                :label="i.label"
+                :value="i.value"
+              >
+              </el-option>
+            </el-select>
+          </CheckItem>
 
-          <el-input
+          <CheckItem
             v-else
-            v-model="scope.row[item.key]"
-            :placeholder="item.placeholder || '请输入内容'"
-          ></el-input>
+            :value="scope.row[item.key]"
+            :rules="item.rules"
+            :ref="'chechItem-' + scope.$index"
+          >
+            <el-input
+              v-model="scope.row[item.key]"
+              :placeholder="item.placeholder || '请输入内容'"
+              :clearable="item.clearable"
+            ></el-input>
+          </CheckItem>
         </template>
 
         <!-- 预览时 -->
         <template v-else>
           <i v-if="item.type === 'icon'" :class="scope.row[item.key]"></i>
+
           <span v-else-if="item.type === 'select'">
             {{ scope.row[item.key] || selectFilter(item.options) }}
           </span>
@@ -55,7 +70,11 @@
           编辑
         </el-button>
         <template v-else>
-          <el-button @click="validateRow" size="small" type="primary">
+          <el-button
+            @click="validateRow(scope.row, scope.$index)"
+            size="small"
+            type="primary"
+          >
             保存
           </el-button>
           <el-button size="small" @click="cancelEdit(scope.$index)">
@@ -69,13 +88,14 @@
 
 <script>
 import { objDeepCopy } from "@/utils/util";
-import Schema from "async-validator";
+import CheckItem from "@/components/CheckItem";
 
 export default {
   /**
    * 事件
    * @delItem 点击删除时执行 参数：当前row
    */
+  components: { CheckItem },
   props: {
     data: {
       type: Array,
@@ -98,9 +118,6 @@ export default {
       tableDateCache: objDeepCopy(this.data),
     };
   },
-  computed: {},
-  created() {},
-  mounted() {},
   methods: {
     // 编辑单行
     editItem(row) {
@@ -122,33 +139,19 @@ export default {
       this.$emit("delItem", row);
     },
 
-    // 点击保存按钮
-    submitRow(row) {
-      this.validateRow();
-      console.log(row);
-    },
-
-    validateRow() {
-      const descriptor = {
-        email: [
-          {
-            type: "email",
-            message: "请输入正确的邮箱地址",
-          },
-        ],
-      };
-
-      const validator = new Schema(descriptor);
-
-      validator.validate({ email: "5" }, (errors, fields) => {
-        console.log(errors);
-        console.log(fields);
+    // 点击保存按钮时表单验证
+    validateRow(row, index) {
+      const promiseList = [];
+      this.$refs["chechItem-" + index].forEach((item) => {
+        promiseList.push(item.validateRow());
       });
-    },
-  },
-  watch: {
-    data(value) {
-      return (this.tableDateCache = objDeepCopy(value));
+      Promise.all(promiseList)
+        .then(() => {
+          this.$emit("submitRow", row, true);
+        })
+        .catch(() => {
+          this.$emit("submitRow", row, false);
+        });
     },
   },
   filters: {

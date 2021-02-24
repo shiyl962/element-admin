@@ -23,16 +23,28 @@ export default {
           title: "用户名",
           key: "userName",
           edit: true,
+          rules: [
+            { required: true, message: "请输入活动名称", trigger: "blur" },
+            {
+              min: 3,
+              max: 5,
+              message: "长度在 3 到 5 个字符",
+              trigger: "blur",
+            },
+          ],
+          clearable: true,
         },
         {
           title: "用户密码",
           key: "password",
           edit: true,
+          clearable: true,
         },
         {
           title: "姓名",
           key: "name",
           edit: true,
+          clearable: true,
         },
         {
           title: "性别",
@@ -53,16 +65,19 @@ export default {
             },
           ],
           edit: true,
+          clearable: true,
         },
         {
           title: "联系电话",
           key: "phone",
           edit: true,
+          clearable: true,
         },
         {
           title: "邮箱",
           key: "email",
           edit: true,
+          clearable: true,
         },
       ],
       tableData: [
