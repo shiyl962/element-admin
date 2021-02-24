@@ -47,7 +47,7 @@ export default {
     size: {
       validator: function(value) {
         // 这个值必须匹配下列字符串中的一个
-        return ["medium", "small", "mini"].indexOf(value) !== -1;
+        return ["medium", "small", "mini", ""].indexOf(value) !== -1;
       },
       default: "",
     },
