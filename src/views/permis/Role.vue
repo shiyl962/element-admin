@@ -345,11 +345,9 @@ export default {
       },
     };
   },
-  computed: {},
   created() {
     this.getPagesList();
   },
-  mounted() {},
   methods: {
     getPagesList() {
       // 获取的有分配权限的所有页面
@@ -397,6 +395,7 @@ export default {
         this.$set(item, "hidden", false);
         this.$set(item, "affix", false);
       });
+      this.$refs.form && this.$refs.form.resetFields();
       this.dialog.visible = true;
     },
     // 打开编辑弹窗
@@ -420,6 +419,7 @@ export default {
           this.$set(item, "affix", false);
         }
       });
+      this.$refs.form && this.$refs.form.resetFields();
       this.dialog.visible = true;
     },
     submitForm() {
