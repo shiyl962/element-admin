@@ -5,6 +5,7 @@
       v-model="valueCopy"
       :clearable="clearable"
       :placeholder="placeholder"
+      :size="size"
     />
     <template v-else>
       <span v-if="type === 'string'">{{ valueCopy }}</span>
@@ -42,6 +43,13 @@ export default {
     rules: {
       type: [Array, Object],
       default: () => {},
+    },
+    size: {
+      validator: function(value) {
+        // 这个值必须匹配下列字符串中的一个
+        return ["medium", "small", "mini"].indexOf(value) !== -1;
+      },
+      default: "",
     },
   },
   data() {
