@@ -154,7 +154,7 @@ const layout = {
     setMenuList(state, list) {
       state.menuList = Array.from(list);
 
-      mappingRouter(routerList, flattenDeep(list));
+      list && list.length && mappingRouter(routerList, flattenDeep(list));
 
       state.tabs = [];
 
