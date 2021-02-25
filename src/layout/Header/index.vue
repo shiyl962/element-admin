@@ -96,6 +96,7 @@ export default {
         // 登出
         c: () => {
           uplogin();
+          this.$store.commit("setMenuList", []);
           this.$router.push("/login");
         },
       };
