@@ -55,7 +55,13 @@ export default {
           title: "路径",
           key: "path",
           edit: true,
-          rules: [{ required: true, message: "请输入菜单路径" }],
+          rules: [
+            { required: true, message: "请输入菜单路径" },
+            {
+              pattern: /^\/[\w-/]*$/,
+              message: "请输入正确的路径",
+            },
+          ],
           clearable: true,
         },
         {
