@@ -103,21 +103,25 @@
       >
         <div class="custom-tree-node" slot-scope="{ node, data }">
           <div class="custom-tree-node-item">
-            <template v-if="data.children">
-              <TableEditItem
+            <template v-if="data.children && data.edit">
+              <EditItem
                 :ref="'edit-icon-' + data.id"
                 v-model="data.icon"
-                :edit="data.edit"
+                :options="{
+                  type: 'icon',
+                  clearable: true,
+                }"
+                :hidden-message="true"
                 size="mini"
                 style="margin-right:10px"
-                type="icon"
-              ></TableEditItem>
-              <TableEditItem
+              ></EditItem>
+              <EditItem
                 :ref="'edit-title-' + data.id"
                 v-model="data.title"
-                :edit="data.edit"
+                :options="{ clearable: true, rules: titleRules }"
+                :hidden-message="true"
                 size="mini"
-              ></TableEditItem>
+              ></EditItem>
             </template>
 
             <template v-else>
@@ -130,11 +134,11 @@
 
           <div v-if="data.children">
             <template v-if="data.edit">
+              <el-button @click="submitItem(data)" type="text" size="mini">
+                保存
+              </el-button>
               <el-button @click="closeEditItem(data)" type="text" size="mini">
                 取消
-              </el-button>
-              <el-button type="text" size="mini">
-                保存
               </el-button>
             </template>
             <el-button
@@ -164,10 +168,10 @@
 </template>
 
 <script>
-import TableEditItem from "@/components/TableEditItem";
+import EditItem from "@/components/editItem";
 export default {
   name: "Role",
-  components: { TableEditItem },
+  components: { EditItem },
   data() {
     return {
       pages: [],
@@ -343,6 +347,14 @@ export default {
           },
         ],
       },
+      titleRules: [
+        { required: true, message: "请输入菜单名称" },
+        {
+          min: 2,
+          max: 5,
+          message: "长度在 2 到 5 个字符",
+        },
+      ],
     };
   },
   created() {
@@ -451,6 +463,16 @@ export default {
       this.$set(data, "edit", false);
       this.$set(data, "icon", this.$refs["edit-icon-" + data.id].initValue);
       this.$set(data, "title", this.$refs["edit-title-" + data.id].initValue);
+    },
+    submitItem(data) {
+      this.$refs["edit-title-" + data.id]
+        .validateRow()
+        .then(() => {
+          console.log("校验通过");
+        })
+        .catch((errors) => {
+          this.$message.error(errors[0].message);
+        });
     },
   },
 };

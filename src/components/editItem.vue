@@ -10,6 +10,7 @@
       v-model="modelValue"
       :placeholder="options.placeholder || '请选择'"
       :clearable="options.clearable"
+      :size="size"
     >
       <el-option
         v-for="i in options.options"
@@ -24,8 +25,9 @@
       v-model="modelValue"
       :placeholder="options.placeholder || '请输入内容'"
       :clearable="options.clearable"
+      :size="size"
     ></el-input>
-    <div v-if="isError" class="item-error">{{ message }}</div>
+    <div v-if="isError && !hiddenMessage" class="item-error">{{ message }}</div>
   </div>
 </template>
 
@@ -41,6 +43,18 @@ export default {
     options: {
       type: Object,
       required: true,
+    },
+    size: {
+      validator: function(value) {
+        // 这个值必须匹配下列字符串中的一个
+        return ["medium", "small", "mini", ""].indexOf(value) !== -1;
+      },
+      default: "",
+    },
+    // 是否隐藏 Message
+    hiddenMessage: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -77,7 +91,7 @@ export default {
           if (errors) {
             this.isError = true;
             this.message = errors[0].message;
-            reject(false);
+            reject(errors);
           } else {
             this.isError = false;
             this.message = "";
