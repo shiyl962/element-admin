@@ -77,9 +77,11 @@ export default {
           if (errors) {
             this.isError = true;
             this.message = errors[0].message;
-            resolve(true);
-          } else {
             reject(false);
+          } else {
+            this.isError = false;
+            this.message = "";
+            resolve(true);
           }
         });
       });
