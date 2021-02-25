@@ -112,7 +112,6 @@ export default {
 }
 .input-item {
   width: 400px;
-  margin-right: 10px;
 }
 .tab-footer {
   padding: 20px;
