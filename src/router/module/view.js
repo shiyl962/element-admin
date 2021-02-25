@@ -48,6 +48,12 @@ const builtPage = [
     component: () => import(/* webpackChunkName: "404" */ "@/views/404.vue"),
     meta: { title: "404", permission: true },
   },
+  {
+    path: "/redirect/:path*",
+    component: () =>
+      import(/* webpackChunkName: "redirect" */ "@/views/Redirect.vue"),
+    meta: { permission: true },
+  },
 ];
 
 // 业务页面，正式使用时应该被重置

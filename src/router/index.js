@@ -35,18 +35,6 @@ const routes = [
     redirect: "/index",
     children: [...view, ...Pages],
   },
-  {
-    path: "/redirect",
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: "/redirect/:path*",
-        component: () =>
-          import(/* webpackChunkName: "redirect" */ "@/views/Redirect.vue"),
-      },
-    ],
-  },
   { path: "*", redirect: "/404" },
 ];
 
