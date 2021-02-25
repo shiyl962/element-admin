@@ -1,5 +1,5 @@
 // 系统内置页面，正式使用时也不应该被删除
-const builtPage = [
+export default [
   {
     path: "/index",
     name: "Home",
@@ -56,34 +56,3 @@ const builtPage = [
     meta: {},
   },
 ];
-
-// 业务页面，正式使用时应该被重置
-const view = [
-  {
-    path: "/about",
-    name: "About",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "@/pages/About.vue"),
-    meta: {},
-  },
-  {
-    path: "/menu1",
-    name: "Menu1",
-    component: () => import(/* webpackChunkName: "menu" */ "@/pages/Menu1.vue"),
-    meta: {},
-  },
-  {
-    path: "/menu2",
-    name: "Menu2",
-    component: () => import(/* webpackChunkName: "menu" */ "@/pages/Menu2.vue"),
-    meta: {},
-  },
-  {
-    path: "/menu3",
-    name: "Menu3",
-    component: () => import(/* webpackChunkName: "menu" */ "@/pages/Menu3.vue"),
-    meta: {},
-  },
-];
-
-export default [...builtPage, ...view];
