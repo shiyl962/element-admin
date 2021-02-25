@@ -7,8 +7,12 @@ import "nprogress/nprogress.css"; // progress bar style
 
 // 获取后端路由表
 const setMenulist = async () => {
-  const { data } = await getMenuList();
-  store.commit("setMenuList", data.data);
+  try {
+    const { data } = await getMenuList();
+    store.commit("setMenuList", data.data);
+  } catch (error) {
+    NProgress.done();
+  }
 };
 
 /**判断前端模拟的登录状态 正式使用时直接删除*/
@@ -40,6 +44,7 @@ router.beforeEach(async (to, from, next) => {
         }
       }
     } else {
+      store.commit("setMenuList", []);
       next("/login");
       NProgress.done();
     }

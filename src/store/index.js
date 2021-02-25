@@ -22,8 +22,11 @@ const flattenDeep = (array = []) => {
 
 // 将路由和后端路由表对应
 const mappingRouter = (routerList, menulist) => {
-  const find = routerList.find((item) => item.path === "/");
+  initRouterPermis(routerList); // 初始化路由表
 
+  if (!menulist.length) return;
+
+  const find = routerList.find((item) => item.path === "/");
   find.children.forEach((item) => {
     let find = menulist.find((i) => i.path === item.path);
     if (find) {
@@ -36,7 +39,22 @@ const mappingRouter = (routerList, menulist) => {
   });
 };
 
-let routerList = router.history.router.options.routes; // 前端注册的路由表
+// 初始化路由权限
+function initRouterPermis(routerList) {
+  const find = routerList.find((item) => item.path === "/");
+
+  find.children.forEach((item) => {
+    if (["Err401", "Err404", "redirect"].indexOf(item.name) !== -1) {
+      item.meta.permission = true;
+    } else {
+      item.meta.permission = false;
+    }
+  });
+}
+
+let routerList = router.options.routes; // 前端注册的路由表
+
+initRouterPermis(routerList);
 
 let history = null; // 在tabs改变的时候记录之前的状态
 
@@ -154,7 +172,7 @@ const layout = {
     setMenuList(state, list) {
       state.menuList = Array.from(list);
 
-      list && list.length && mappingRouter(routerList, flattenDeep(list));
+      mappingRouter(routerList, flattenDeep(list));
 
       state.tabs = [];
 
