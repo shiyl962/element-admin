@@ -1,10 +1,23 @@
 <template>
-  <ElTableEdit
-    :data="tableData"
-    :columns="columns"
-    border
-    style="width: 100%"
-  />
+  <ElTableEdit :data="tableData" :columns="columns" border style="width: 100%">
+    <el-button
+      slot="header"
+      size="small"
+      type="primary"
+      icon="el-icon-document-add"
+    >
+      新增
+    </el-button>
+    <template v-slot:column-actions="scope">
+      <el-button
+        @click="delItem(scope.row, scope.$index)"
+        type="danger"
+        size="small"
+      >
+        删除
+      </el-button>
+    </template>
+  </ElTableEdit>
 </template>
 
 <script>
@@ -18,6 +31,7 @@ export default {
         {
           title: "关联角色",
           key: "roleName",
+          width: 100,
         },
         {
           title: "用户名",
@@ -112,6 +126,10 @@ export default {
   methods: {
     // 新增用户
     addUserItem() {},
+    delItem(row, index) {
+      console.log(row);
+      console.log(index);
+    },
   },
   watch: {},
 };

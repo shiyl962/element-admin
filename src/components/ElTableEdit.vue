@@ -1,46 +1,24 @@
 <template>
   <el-table :data="data" v-bind="$attrs">
+    <template slot="append">
+      <slot name="append"></slot>
+    </template>
     <el-table-column
       v-for="item in columns"
       :label="item.title"
       :key="item.key"
+      :width="item.width"
+      :min-width="item.minWidth"
     >
       <template slot-scope="scope">
         <!-- 编辑时 -->
         <template v-if="item.edit && scope.row._edit">
-          <CheckItem
-            v-if="item.type === 'select'"
-            :value="scope.row[item.key]"
-            :rules="item.rules"
+          <editItem
+            v-model="scope.row[item.key]"
+            :options="item"
             :ref="'chechItem-' + scope.$index"
           >
-            <el-select
-              v-model="scope.row[item.key]"
-              :placeholder="item.placeholder || '请选择'"
-              :clearable="item.clearable"
-            >
-              <el-option
-                v-for="i in item.options"
-                :key="i.value"
-                :label="i.label"
-                :value="i.value"
-              >
-              </el-option>
-            </el-select>
-          </CheckItem>
-
-          <CheckItem
-            v-else
-            :value="scope.row[item.key]"
-            :rules="item.rules"
-            :ref="'chechItem-' + scope.$index"
-          >
-            <el-input
-              v-model="scope.row[item.key]"
-              :placeholder="item.placeholder || '请输入内容'"
-              :clearable="item.clearable"
-            ></el-input>
-          </CheckItem>
+          </editItem>
         </template>
 
         <!-- 预览时 -->
@@ -50,12 +28,16 @@
           <span v-else-if="item.type === 'select'">
             {{ scope.row[item.key] || selectFilter(item.options) }}
           </span>
+
           <span v-else>{{ scope.row[item.key] }}</span>
         </template>
       </template>
     </el-table-column>
 
-    <el-table-column label="操作">
+    <el-table-column label="操作" :width="actionsWidth">
+      <template slot="header">
+        <slot name="header"></slot>
+      </template>
       <template
         v-if="columns.some((item) => item.edit === true)"
         slot-scope="scope"
@@ -77,46 +59,47 @@
           >
             保存
           </el-button>
-          <el-button size="small" @click="cancelEdit(scope.$index)">
+          <el-button size="small" @click="cancelEdit(scope.row, scope.$index)">
             取消
           </el-button>
         </template>
+
+        <slot
+          name="column-actions"
+          :row="scope.row"
+          :$index="scope.$index"
+        ></slot>
       </template>
     </el-table-column>
   </el-table>
 </template>
 
 <script>
-import { objDeepCopy } from "@/utils/util";
-import CheckItem from "@/components/CheckItem";
+import editItem from "@/components/editItem";
 
 export default {
   /**
    * 事件
    * @delItem 点击删除时执行 参数：当前row
+   * @submitRow 点击保存并通过验证 参数：当前 row,是否通过 valid
    */
-  components: { CheckItem },
+  components: { editItem },
   props: {
+    // 表格数据
     data: {
       type: Array,
       default: () => [],
     },
+    // 列配置
     columns: {
       type: Array,
       default: () => [],
     },
-    /**
-     * 是否显示删除按钮
-     */
-    idDel: {
-      type: Boolean,
-      default: false,
+    // 操作栏宽度
+    actionsWidth: {
+      type: Number,
+      default: 250,
     },
-  },
-  data() {
-    return {
-      tableDateCache: objDeepCopy(this.data),
-    };
   },
   methods: {
     // 编辑单行
@@ -125,18 +108,11 @@ export default {
     },
 
     // 取消编辑
-    cancelEdit($index) {
-      this.$set(this.data, $index, this.tableDateCache[$index]);
-      this.data.forEach((item, index) => {
-        if (index === $index) {
-          this.$set(item, "_edit", false);
-        }
+    cancelEdit(row, index) {
+      this.$refs["chechItem-" + index].forEach((item) => {
+        item.cancelEdit();
       });
-    },
-
-    // 点击删除按钮
-    delItem(row) {
-      this.$emit("delItem", row);
+      this.$set(row, "_edit", false);
     },
 
     // 点击保存按钮时表单验证
