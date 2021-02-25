@@ -38,6 +38,7 @@
       <template slot="header">
         <slot name="header"></slot>
       </template>
+
       <template
         v-if="columns.some((item) => item.edit === true)"
         slot-scope="scope"
