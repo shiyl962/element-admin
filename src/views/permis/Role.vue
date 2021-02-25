@@ -168,7 +168,7 @@
 </template>
 
 <script>
-import EditItem from "@/components/editItem";
+import EditItem from "@/components/ElTableEdit/EditItem";
 export default {
   name: "Role",
   components: { EditItem },

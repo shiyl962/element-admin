@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { treeFilter } from "@/utils/util";
+import { treeFilter } from "@/utils/index.js";
 
 export default {
   computed: {

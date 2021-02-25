@@ -13,12 +13,12 @@
       <template slot-scope="scope">
         <!-- 编辑时 -->
         <template v-if="item.edit && scope.row._edit">
-          <editItem
+          <EditItem
             v-model="scope.row[item.key]"
             :options="item"
             :ref="'chechItem-' + scope.$index"
           >
-          </editItem>
+          </EditItem>
         </template>
 
         <!-- 预览时 -->
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import editItem from "@/components/editItem";
+import EditItem from "@/components/ElTableEdit/EditItem";
 
 export default {
   /**
@@ -84,7 +84,7 @@ export default {
    * @delItem 点击删除时执行 参数：当前row
    * @submitRow 点击保存并通过验证 参数：当前 row,是否通过 valid
    */
-  components: { editItem },
+  components: { EditItem },
   props: {
     // 表格数据
     data: {

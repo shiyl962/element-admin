@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import ElTableEdit from "@/components/ElTableEdit";
+import ElTableEdit from "@/components/ElTableEdit/";
 export default {
   name: "Menu",
   components: { ElTableEdit },
