@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Schema from "async-validator";
+import Schema from "async-validator"; // element内部已安装
 
 export default {
   props: {
