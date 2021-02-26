@@ -22,7 +22,7 @@
         </template>
 
         <!-- 预览时 -->
-        <template v-else>
+        <slot v-else :name="item.key" :row="scope.row" :$index="scope.$index">
           <i v-if="item.type === 'icon'" :class="scope.row[item.key]"></i>
 
           <span v-else-if="item.type === 'select'">
@@ -30,7 +30,7 @@
           </span>
 
           <span v-else>{{ scope.row[item.key] }}</span>
-        </template>
+        </slot>
       </template>
     </el-table-column>
 
