@@ -21,10 +21,9 @@
 </template>
 
 <script>
-import ElTableEdit from "@/components/ElTableEdit/";
 export default {
   name: "Account",
-  components: { ElTableEdit },
+  components: {},
   data() {
     return {
       columns: [

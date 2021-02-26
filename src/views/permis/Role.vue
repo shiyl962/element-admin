@@ -168,10 +168,9 @@
 </template>
 
 <script>
-import EditItem from "@/components/ElTableEdit/EditItem";
 export default {
   name: "Role",
-  components: { EditItem },
+  components: {},
   data() {
     return {
       pages: [],

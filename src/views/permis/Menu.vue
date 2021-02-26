@@ -29,10 +29,9 @@
 </template>
 
 <script>
-import ElTableEdit from "@/components/ElTableEdit/";
 export default {
   name: "Menu",
-  components: { ElTableEdit },
+  components: {},
   data() {
     return {
       searchValue: "",
