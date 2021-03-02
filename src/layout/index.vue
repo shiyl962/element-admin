@@ -52,6 +52,7 @@ export default {
 <style scoped>
 .container {
   position: relative;
+  overflow: hidden;
 }
 .el-header {
   padding: 0 !important;
