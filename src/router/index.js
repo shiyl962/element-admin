@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Layout from "@/layout";
 import view from "./module/view";
 import Pages from "./module/pages";
+import Lock from "@/views/Lock";
 
 Vue.use(VueRouter);
 
@@ -34,6 +35,11 @@ const routes = [
     component: Layout,
     redirect: "/index",
     children: [...view, ...Pages],
+  },
+  {
+    path: "/lock",
+    hidden: true,
+    component: Lock,
   },
   { path: "*", redirect: "/404" },
 ];
