@@ -47,6 +47,9 @@ export default {
       },
     };
   },
+  mounted() {
+    window.addEventListener("keypress", this.onEnter);
+  },
   methods: {
     onSubmit() {
       this.$refs.form.validate((valid) => {
@@ -63,6 +66,15 @@ export default {
         }
       });
     },
+    // 监听回车事件
+    onEnter(e) {
+      if (e.key === "Enter") {
+        this.onSubmit();
+      }
+    },
+  },
+  beforeDestroy() {
+    window.removeEventListener("keypress", this.onEnter);
   },
 };
 </script>
