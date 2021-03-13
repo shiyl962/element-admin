@@ -52,7 +52,8 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (login(this.form.username, this.form.password)) {
-            this.$store.commit("setMenuList", []);
+            this.$store.commit("setMenuList", []); // 清空侧边栏菜单
+            this.$store.commit("updateLock", null); // 清除锁屏
             this.$router.push("/");
           } else {
             this.$message.error("用户名或密码错误");

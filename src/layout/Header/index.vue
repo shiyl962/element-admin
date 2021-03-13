@@ -27,7 +27,7 @@
         </el-switch>
       </el-tooltip>
 
-      <div class="link">
+      <div class="link" @click="lock">
         <i class="el-icon-lock"></i>
       </div>
 
@@ -100,6 +100,20 @@ export default {
         },
       };
       handle[command] && handle[command]();
+    },
+    // 锁屏
+    lock() {
+      this.$prompt("", "锁屏", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputPlaceholder: "请输入锁屏密码",
+        inputPattern: /^[A-Za-z0-9!@#$%^&*?]+$/,
+        inputErrorMessage: "只能输入英文，数字，特殊字符的组合",
+      })
+        .then(({ value }) => {
+          this.$store.commit("updateLock", value);
+        })
+        .catch(() => {});
     },
   },
   watch: {

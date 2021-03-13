@@ -1,33 +1,38 @@
 <template>
-  <el-container class="container">
-    <Aside class="aside" />
-    <div
-      v-show="!isCollapse"
-      class="drawer-bg"
-      @click="setCollapse(!isCollapse)"
-    ></div>
-    <el-container>
-      <el-header class="el-header" height="auto">
-        <Header />
-        <Tabs />
-      </el-header>
+  <keep-alive>
+    <Lock v-if="isLock" />
 
-      <el-main class="main">
-        <keep-alive :include="include">
-          <router-view />
-        </keep-alive>
-      </el-main>
+    <el-container v-else class="container">
+      <Aside class="aside" />
+      <div
+        v-show="!isCollapse"
+        class="drawer-bg"
+        @click="setCollapse(!isCollapse)"
+      ></div>
+      <el-container>
+        <el-header class="el-header" height="auto">
+          <Header />
+          <Tabs />
+        </el-header>
 
-      <el-backtop target=".main"></el-backtop>
+        <el-main class="main">
+          <keep-alive :include="include">
+            <router-view />
+          </keep-alive>
+        </el-main>
+
+        <el-backtop target=".main"></el-backtop>
+      </el-container>
     </el-container>
-  </el-container>
+  </keep-alive>
 </template>
 <script>
 import Aside from "./Aside";
 import Header from "./Header";
 import Tabs from "./Tabs";
+import Lock from "./Lock";
 export default {
-  components: { Aside, Header, Tabs },
+  components: { Aside, Header, Tabs, Lock },
   computed: {
     //控制侧边栏展开收起状态
     isCollapse() {
@@ -38,6 +43,9 @@ export default {
     },
     include() {
       return this.$store.getters.include;
+    },
+    isLock() {
+      return this.$store.state.lock.isLock;
     },
   },
   methods: {
