@@ -9,6 +9,7 @@
             placeholder="请输入锁屏密码"
             clearable
             type="password"
+            @keyup.enter.native="unlock"
           ></el-input>
           <el-button type="primary" plain icon="el-icon-unlock" @click="unlock">
           </el-button>
