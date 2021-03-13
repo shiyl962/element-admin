@@ -8,7 +8,7 @@
             v-model="password"
             placeholder="请输入锁屏密码"
             clearable
-            type="password"
+            :type="inputType"
             @keyup.enter.native="unlock"
           ></el-input>
           <el-button type="primary" plain icon="el-icon-unlock" @click="unlock">
@@ -36,13 +36,18 @@ export default {
   data() {
     return {
       password: "",
+      inputType: "password",
     };
+  },
+  activated() {
+    this.inputType = "password";
   },
   methods: {
     unlock() {
       if (sessionStorage.getItem(key) === this.password) {
         this.password = "";
         this.$store.commit("updateLock", null);
+        this.inputType = "text";
       } else {
         this.$message.error("锁屏密码错误！");
       }
