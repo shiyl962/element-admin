@@ -7,13 +7,8 @@ import "nprogress/nprogress.css"; // progress bar style
 
 // 获取后端路由表
 const setMenulist = async () => {
-  try {
-    const { data } = await getMenuList();
-    await store.commit("setMenuList", data.data || []);
-    return true;
-  } catch (error) {
-    return false;
-  }
+  const { data } = await getMenuList();
+  await store.commit("setMenuList", data.data || []);
 };
 
 // 全局路由守卫
@@ -22,20 +17,14 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start();
   if (typeof to.meta.permission === "boolean") {
     if (store.state.layout.menuList.length <= 0) {
-      if (!(await setMenulist())) {
-        next("/login");
-        NProgress.done();
-      } else {
-        next({ path: to.fullPath, replace: true }); //重新进入此路由，replace设置为true之后浏览器不会有多余的历史记录
-      }
+      await setMenulist();
+    }
+    if (to.meta.permission) {
+      next();
+      NProgress.done();
     } else {
-      if (to.meta.permission) {
-        next();
-        NProgress.done();
-      } else {
-        next("/401"); // 无权限
-        NProgress.done();
-      }
+      next("/401"); // 无权限
+      NProgress.done();
     }
   } else {
     next(); // 不需要权限验证的页面
