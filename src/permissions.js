@@ -9,44 +9,33 @@ import "nprogress/nprogress.css"; // progress bar style
 const setMenulist = async () => {
   try {
     const { data } = await getMenuList();
-    store.commit("setMenuList", data.data);
+    await store.commit("setMenuList", data.data || []);
+    return true;
   } catch (error) {
-    NProgress.done();
+    return false;
   }
 };
-
-/**判断前端模拟的登录状态 正式使用时直接删除*/
-import { validation } from "@/mock-login.js";
-if (!validation()) {
-  router.push("/login");
-}
 
 // 全局路由守卫
 // 用于判断权限
 router.beforeEach(async (to, from, next) => {
   NProgress.start();
   if (typeof to.meta.permission === "boolean") {
-    // 判断前端模拟的登录状态
-    // 正式使用时应去掉这一层判断，
-    // 很多人喜欢用cookie是否存在来判断是否登录我觉得是不合理的，我认为应该在axios拦截器里做判断
-    if (validation()) {
-      const menuList = store.state.layout.menuList;
-      if (menuList.length <= 0) {
-        await setMenulist();
-        next({ path: to.fullPath, replace: true }); //重新进入此路由，replace设置为true之后浏览器不会有多余的历史记录
+    if (store.state.layout.menuList.length <= 0) {
+      if (!(await setMenulist())) {
+        next("/login");
+        NProgress.done();
       } else {
-        if (to.meta.permission) {
-          next();
-          NProgress.done();
-        } else {
-          next("/401"); // 无权限
-          NProgress.done();
-        }
+        next({ path: to.fullPath, replace: true }); //重新进入此路由，replace设置为true之后浏览器不会有多余的历史记录
       }
     } else {
-      store.commit("setMenuList", []);
-      next("/login");
-      NProgress.done();
+      if (to.meta.permission) {
+        next();
+        NProgress.done();
+      } else {
+        next("/401"); // 无权限
+        NProgress.done();
+      }
     }
   } else {
     next(); // 不需要权限验证的页面
