@@ -7,8 +7,12 @@ import "nprogress/nprogress.css"; // progress bar style
 
 // 获取后端路由表
 const setMenulist = async () => {
-  const { data } = await getMenuList();
-  await store.commit("setMenuList", data.data || []);
+  try {
+    const { data } = await getMenuList();
+    await store.commit("setMenuList", data.data || []);
+  } catch (error) {
+    await store.commit("setMenuList", []);
+  }
 };
 
 // 全局路由守卫
