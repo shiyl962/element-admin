@@ -54,7 +54,6 @@
 <script>
 import Breadcrumb from "./Breadcrumb";
 import Screenfull from "./Screenfull";
-import { uplogin } from "@/mock-login.js"; // 模拟登陆模块
 export default {
   components: { Breadcrumb, Screenfull },
   data() {
@@ -95,7 +94,6 @@ export default {
         },
         // 登出
         c: () => {
-          uplogin();
           this.$router.push("/login");
         },
       };

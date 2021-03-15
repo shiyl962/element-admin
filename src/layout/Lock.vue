@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { uplogin } from "@/mock-login.js"; // 模拟登陆模块
 const key = "lock-password";
 
 export default {
@@ -54,7 +53,6 @@ export default {
     },
     // 登出
     unLogin() {
-      uplogin();
       this.password = "";
       this.$store.commit("updateLock", null);
       this.$router.push("/login");

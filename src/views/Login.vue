@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { login } from "@/mock-login.js";
 export default {
   data() {
     return {
@@ -54,7 +53,10 @@ export default {
     onSubmit() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (login(this.form.username, this.form.password)) {
+          if (
+            this.form.username === "admin" &&
+            this.form.password === "password"
+          ) {
             this.$store.commit("setMenuList", []); // 清空侧边栏菜单
             this.$store.commit("updateLock", null); // 清除锁屏
             this.$router.push("/");
